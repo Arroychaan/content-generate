@@ -1,4 +1,4 @@
-import { callDeepSeek } from '../services/llm/DeepSeekClient';
+import { callGroq } from '../services/llm/GroqClient.js';
 import { withExponentialBackoff } from '../services/resilience/ExponentialBackoff';
 
 export async function execute(draftContext = {}) {
@@ -23,7 +23,7 @@ export async function execute(draftContext = {}) {
 
   try {
     const angle = await withExponentialBackoff(
-      () => callDeepSeek(prompt)
+      () => callGroq(prompt)
     );
     console.log(`Angle terpilih: ${angle}`);
     return angle;

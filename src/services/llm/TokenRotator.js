@@ -1,6 +1,6 @@
 import { supabaseAdmin } from '../../lib/supabase';
 import { callGemini } from './GeminiClient';
-import { callDeepSeek } from './DeepSeekClient';
+import { callGroq } from './GroqClient.js';
 import { sendTelegramNotification } from '../notification/TelegramNotifier';
 import { globalRateLimiter } from './RateLimiter';
 
@@ -22,9 +22,9 @@ export async function generateTextWithRotation(prompt, model = 'gemini-3.5-flash
   }
 
   if (!keys || keys.length === 0) {
-    console.warn('All Gemini keys are blocked or none exist. Falling back to DeepSeek-V3.');
-    await sendTelegramNotification('LLM_FALLBACK', 'All Gemini keys blocked, using DeepSeek-V3 fallback.');
-    return await callDeepSeek(prompt, maxTokens);
+    console.warn('All Gemini keys are blocked or none exist. Falling back to Groq.');
+    await sendTelegramNotification('LLM_FALLBACK', 'All Gemini keys blocked, using Groq fallback.');
+    return await callGroq(prompt, maxTokens);
   }
 
   // Iterate over available keys
@@ -69,7 +69,7 @@ export async function generateTextWithRotation(prompt, model = 'gemini-3.5-flash
   }
 
   // If we reach here, all attempted active keys resulted in Quota Exceeded during this loop
-  console.warn('All attempted Gemini keys hit limit during execution. Falling back to DeepSeek-V3.');
-  await sendTelegramNotification('LLM_FALLBACK', 'Hit limits on all Gemini keys during loop, fallback to DeepSeek-V3.');
-  return await callDeepSeek(prompt, maxTokens);
+  console.warn('All attempted Gemini keys hit limit during execution. Falling back to Groq.');
+  await sendTelegramNotification('LLM_FALLBACK', 'Hit limits on all Gemini keys during loop, fallback to Groq.');
+  return await callGroq(prompt, maxTokens);
 }

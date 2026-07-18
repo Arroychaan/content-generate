@@ -1,4 +1,4 @@
-import { callDeepSeek } from '../services/llm/DeepSeekClient';
+import { callGroq } from '../services/llm/GroqClient.js';
 import { withExponentialBackoff } from '../services/resilience/ExponentialBackoff';
 
 // Fungsi helper untuk mengambil teks dasar dari halaman web secara sederhana
@@ -51,12 +51,12 @@ export async function execute(draftContext = {}) {
 
   try {
     const researchData = await withExponentialBackoff(
-      () => callDeepSeek(prompt)
+      () => callGroq(prompt)
     );
     console.log(`Deep Research berhasil untuk topik: ${topic.title}`);
     return researchData;
   } catch (e) {
-    console.warn('DeepSeek gagal, fallback menggunakan data deskripsi awal saja.', e.message);
+    console.warn('Groq gagal, fallback menggunakan data deskripsi awal saja.', e.message);
     return topic.combined_description; // Fallback jika LLM error
   }
 }

@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "run-worker": "npx tsx --env-file=.env.local src/scripts/run-worker.js"
+    "run-worker": "if [ -f .env.local ]; then npx tsx --env-file=.env.local src/scripts/run-worker.js; else npx tsx src/scripts/run-worker.js; fi"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1090.0",

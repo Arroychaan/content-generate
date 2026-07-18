@@ -21,7 +21,7 @@ export async function generateDeepThread(topic, drafts) {
 
   try {
     const jsonString = await withExponentialBackoff(
-      () => generateTextWithRotation(prompt, 'llama-3.3-70b-versatile', 1000)
+      () => generateTextWithRotation(prompt, 'llama-3.3-70b-versatile', 1500)
     );
     
     const cleanJsonStr = jsonString.replace(/```json/g, '').replace(/```/g, '').trim();

@@ -23,7 +23,7 @@ export async function execute(uniqueTopics = []) {
 
     try {
       const result = await withExponentialBackoff(
-        () => generateTextWithRotation(prompt, 'llama-3.3-70b-versatile', 1000)
+        () => generateTextWithRotation(prompt, 'llama-3.3-70b-versatile', 10)
       );
 
       const scoreMatch = result.match(/(\d+\.\d+|\d+)/);

@@ -31,7 +31,7 @@ export async function execute(draftContext = {}) {
 
   try {
     const jsonString = await withExponentialBackoff(
-      () => generateTextWithRotation(prompt, 'llama-3.3-70b-versatile', 1000)
+      () => generateTextWithRotation(prompt, 'llama-3.3-70b-versatile', 150)
     );
     
     const cleanJsonStr = jsonString.replace(/```json/g, '').replace(/```/g, '').trim();

@@ -2,8 +2,8 @@ name: Autonomous AI Content Worker
 
 on:
   schedule:
-    # Jalan setiap 1 jam sekali (Menit 0)
-    - cron: '0 * * * *'
+    # Jalan setiap 30 menit sekali
+    - cron: '*/30 * * * *'
   workflow_dispatch: # Mengizinkan eksekusi manual via GitHub UI
 
 jobs:

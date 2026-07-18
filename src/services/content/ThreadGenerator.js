@@ -1,22 +1,27 @@
 import { generateTextWithRotation } from '../llm/TokenRotator';
 import { withExponentialBackoff } from '../resilience/ExponentialBackoff';
 
-export async function generateDeepThread(topic, drafts) {
+export async function generateThreadsForPlatforms(topic, drafts) {
   const prompt = `
-    Anda adalah Pakar Media Sosial di platform X (Twitter).
-    Tugas: Ubah berita ini menjadi utas (thread) 6 post yang menarik.
+    Anda adalah Pakar Media Sosial.
+    Tugas: Ubah berita ini menjadi 2 utas (thread) terpisah untuk platform X (Twitter) dan Threads.
     
     Topik: ${drafts.title}
     Isi: ${drafts.caption}
     
-    Instruksi:
-    - Post 1: Hook yang memancing perhatian (max 250 char). Akhiri dengan 🧵👇
-    - Post 2-4: Fakta inti dan data statistik (masing-masing max 250 char).
-    - Post 5: Analisis dampak atau "Kenapa ini penting?" (max 250 char).
-    - Post 6: CTA (Call to Action) bertanya pendapat audiens (max 250 char).
+    Instruksi Utas X (Maksimal 270 karakter per post):
+    - Buat 4-5 post.
+    - Post 1 wajib diakhiri 🧵👇
     
-    Balas HANYA dengan format JSON array berisi 6 string, contoh:
-    ["teks 1", "teks 2", "teks 3", "teks 4", "teks 5", "teks 6"]
+    Instruksi Utas Threads (Maksimal 480 karakter per post):
+    - Buat 3-4 post yang lebih detail dan naratif.
+    - Post 1 wajib diakhiri 🧵👇
+    
+    Balas HANYA dengan format JSON murni:
+    {
+      "x": ["post 1", "post 2", "post 3", "post 4"],
+      "threads": ["post 1", "post 2", "post 3"]
+    }
   `;
 
   try {
@@ -25,15 +30,15 @@ export async function generateDeepThread(topic, drafts) {
     );
     
     const cleanJsonStr = jsonString.replace(/```json/g, '').replace(/```/g, '').trim();
-    const threadArray = JSON.parse(cleanJsonStr);
+    const result = JSON.parse(cleanJsonStr);
     
-    if (Array.isArray(threadArray) && threadArray.length > 0) {
-      return { posts: threadArray };
+    if (result.x && result.threads) {
+      return result;
     }
-    throw new Error('Hasil bukan array valid');
+    throw new Error('Hasil bukan format X dan Threads yang valid');
   } catch (e) {
     console.warn('Gagal generate thread via LLM, menggunakan fallback.', e.message);
-    const fallbackX = drafts.title + '\\n\\n' + drafts.caption.substring(0, 200) + '...\\n\\nBaca selengkapnya di utas berikut.';
-    return { posts: [fallbackX] };
+    const fallback = drafts.title + '\\n\\n' + drafts.caption.substring(0, 200) + '...\\n\\nBaca selengkapnya di utas berikut.';
+    return { x: [fallback], threads: [fallback] };
   }
 }

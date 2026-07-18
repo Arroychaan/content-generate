@@ -12,10 +12,10 @@ export async function execute(context = {}) {
   });
 
   const feeds = [
-    'https://news.google.com/rss?hl=id&gl=ID&ceid=ID:id',
-    'https://www.antaranews.com/rss/terkini.xml',
-    'https://www.republika.co.id/rss',
-    'https://www.cnbcindonesia.com/news/rss'
+    'https://techcrunch.com/feed/',
+    'https://www.theverge.com/rss/index.xml',
+    'https://www.wired.com/feed/rss',
+    'https://feeds.bbci.co.uk/news/technology/rss.xml'
   ];
 
   let rawArticles = [];

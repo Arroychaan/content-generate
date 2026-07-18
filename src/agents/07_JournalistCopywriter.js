@@ -16,15 +16,15 @@ export async function execute(draftContext = {}) {
     ${qaFeedback ? `PERHATIAN (Revisi dari QA): ${qaFeedback}` : ''}
     
     Instruksi:
-    1. Judul Utama (title): Maks 60 karakter, punchy, memancing perhatian tapi tidak clickbait.
-    2. Subjudul (subtitle): Maks 90 karakter, pelengkap judul, memberikan konteks.
-    3. Caption (caption): Naskah berita bergaya piramida terbalik (fakta paling penting di paragraf 1). Panjang 3-4 paragraf. Bahasa Indonesia baku namun mengalir (seperti gaya tulisan kumparan/Narasi). Jangan gunakan kata-kata AI generatif (seperti "Menariknya", "Kesimpulannya", "Mari kita").
-    4. Kata Kunci Visual (visual_keywords): 3 kata kunci bahasa inggris untuk mencari gambar stok HD latar belakang (misal: "police car", "jakarta skyline", "protest").
+    1. Judul Utama (title): Maks 60 karakter, punchy, memancing perhatian. Terjemahkan ke Bahasa Indonesia.
+    2. Subjudul (subtitle): Maks 90 karakter, pelengkap judul, memberikan konteks. Terjemahkan ke Bahasa Indonesia.
+    3. Caption (caption): Naskah berita gaya piramida terbalik. Panjang 3-4 paragraf. WAJIB DITULIS DALAM BAHASA INDONESIA baku namun mengalir. Jangan gunakan kata-kata AI generatif (seperti "Menariknya", "Kesimpulannya").
+    4. Kata Kunci Visual (visual_keywords): 3 kata kunci BAHASA INGGRIS untuk mencari gambar stok HD (misal: "technology", "circuit", "smartphone").
 
     ATURAN SANGAT KETAT (CRITICAL): 
-    - JANGAN PERNAH mengarang skor pertandingan, nama lawan, atau hasil akhir yang tidak secara eksplisit tertulis di dalam teks riset!
-    - JANGAN PERNAH menambahkan kutipan (statement/quotes) palsu dari tokoh jika tidak ada di dalam riset.
-    - Jika fakta/data detail tidak disebutkan di riset, sebutkan secara umum saja (misal: "berhasil meraih kemenangan" tanpa menyebut skor). Pelanggaran terhadap aturan ini akan membuat sistem QA GAGAL!
+    - DILARANG KERAS BERHALUSINASI! Anda HANYA boleh menuliskan fakta yang secara eksplisit ada di dalam teks riset mentah.
+    - DILARANG menambahkan kutipan palsu, angka, statistik, atau nama entitas yang tidak disebutkan di dalam riset.
+    - Jika teks riset ambigu, gunakan bahasa netral tanpa menebak-nebak detailnya. Pelanggaran terhadap aturan ini akan membuat sistem QA GAGAL!
 
     Format balasan WAJIB dalam bentuk JSON murni seperti ini (tanpa backticks markdown):
     {

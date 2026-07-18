@@ -17,10 +17,22 @@ export default function DraftCard({ draft, onPublishSuccess }) {
     if (onPublishSuccess) onPublishSuccess(draft.id);
   };
 
-  const handleCopyThread = () => {
-    if (draft.thread_posts && draft.thread_posts.length > 0) {
-      navigator.clipboard.writeText(draft.thread_posts.join('\n\n'));
-      alert("X Thread copied to clipboard!");
+  const handleCopyContent = () => {
+    if (activeTab === 'IG' && draft.main_caption) {
+      navigator.clipboard.writeText(draft.main_caption);
+      alert("Instagram caption copied!");
+    } else if (activeTab === 'X') {
+      const xPosts = draft.platform_variants?.x?.posts || draft.thread_posts || [];
+      if (xPosts.length > 0) {
+        navigator.clipboard.writeText(xPosts.join('\n\n'));
+        alert("X Thread copied!");
+      }
+    } else if (activeTab === 'THREADS') {
+      const threadsPosts = draft.platform_variants?.threads?.posts || [];
+      if (threadsPosts.length > 0) {
+        navigator.clipboard.writeText(threadsPosts.join('\n\n'));
+        alert("Threads copied!");
+      }
     }
   };
 
@@ -77,37 +89,41 @@ export default function DraftCard({ draft, onPublishSuccess }) {
 
       {/* Tabs for content versions */}
       <div className="flex flex-col flex-grow gap-3">
-        {hasThread && (
-          <div className="flex bg-white/5 p-1 rounded-lg">
-            <button 
-              onClick={() => setActiveTab('IG')}
-              className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-all ${activeTab === 'IG' ? 'bg-white/10 text-white shadow' : 'text-gray-400 hover:text-white'}`}
-            >
-              Main Caption
-            </button>
-            <button 
-              onClick={() => setActiveTab('X')}
-              className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-all ${activeTab === 'X' ? 'bg-white/10 text-white shadow' : 'text-gray-400 hover:text-white'}`}
-            >
-              X Thread
-            </button>
-          </div>
-        )}
+        <div className="flex bg-white/5 p-1 rounded-lg">
+          <button 
+            onClick={() => setActiveTab('IG')}
+            className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-all ${activeTab === 'IG' ? 'bg-white/10 text-white shadow' : 'text-gray-400 hover:text-white'}`}
+          >
+            Instagram
+          </button>
+          <button 
+            onClick={() => setActiveTab('X')}
+            className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-all ${activeTab === 'X' ? 'bg-white/10 text-white shadow' : 'text-gray-400 hover:text-white'}`}
+          >
+            X (Twitter)
+          </button>
+          <button 
+            onClick={() => setActiveTab('THREADS')}
+            className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-all ${activeTab === 'THREADS' ? 'bg-white/10 text-white shadow' : 'text-gray-400 hover:text-white'}`}
+          >
+            Threads
+          </button>
+        </div>
 
         {/* Content Box */}
-        <div className="bg-black/20 rounded-lg p-3 border border-white/5 flex-grow relative group/text">
-          <p className="text-gray-300 text-sm leading-relaxed line-clamp-4 font-mono text-[13px]">
-            {activeTab === 'IG' ? draft.main_caption : draft.thread_posts.join('\\n\\n')}
+        <div className="bg-black/20 rounded-lg p-3 border border-white/5 flex-grow relative group/text overflow-y-auto max-h-48">
+          <p className="text-gray-300 text-sm leading-relaxed font-mono text-[13px] whitespace-pre-wrap">
+            {activeTab === 'IG' ? draft.main_caption : 
+             activeTab === 'X' ? (draft.platform_variants?.x?.posts || draft.thread_posts || []).join('\n\n---\n\n') : 
+             (draft.platform_variants?.threads?.posts || []).join('\n\n---\n\n')}
           </p>
-          {activeTab === 'X' && (
-            <button 
-              onClick={handleCopyThread}
-              className="absolute top-2 right-2 p-1.5 bg-black/50 hover:bg-white/20 rounded text-gray-300 transition-colors backdrop-blur-md opacity-0 group-hover/text:opacity-100"
-              title="Copy Thread"
-            >
-              <Copy className="w-3.5 h-3.5" />
-            </button>
-          )}
+          <button 
+            onClick={handleCopyContent}
+            className="absolute top-2 right-2 p-1.5 bg-black/50 hover:bg-white/20 rounded text-gray-300 transition-colors backdrop-blur-md opacity-0 group-hover/text:opacity-100"
+            title="Copy Content"
+          >
+            <Copy className="w-3.5 h-3.5" />
+          </button>
         </div>
       </div>
 

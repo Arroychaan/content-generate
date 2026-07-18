@@ -1,4 +1,4 @@
-export async function callGroq(apiKey, prompt, model = 'llama3-70b-8192', maxTokens = 1000) {
+export async function callGroq(apiKey, prompt, model = 'llama-3.3-70b-versatile', maxTokens = 1000) {
   if (!apiKey) {
     throw new Error('API key is not defined');
   }

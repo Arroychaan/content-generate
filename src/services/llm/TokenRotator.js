@@ -3,7 +3,7 @@ import { callGroq } from './GroqClient.js';
 import { sendTelegramNotification } from '../notification/TelegramNotifier';
 import { globalRateLimiter } from './RateLimiter';
 
-export async function generateTextWithRotation(prompt, model = 'llama3-70b-8192', maxTokens = 1000) {
+export async function generateTextWithRotation(prompt, model = 'llama-3.3-70b-versatile', maxTokens = 1000) {
   // Apply the 4.5s rate limit before processing to respect API rate limits
   await globalRateLimiter.wait();
 

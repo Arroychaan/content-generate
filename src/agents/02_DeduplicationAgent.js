@@ -40,7 +40,7 @@ export async function execute(rawArticles = []) {
 
         try {
           const llmCheck = await withExponentialBackoff(
-            () => generateTextWithRotation(prompt, 'llama3-70b-8192', 10)
+            () => generateTextWithRotation(prompt, 'llama-3.3-70b-versatile', 10)
           );
           
           if (llmCheck.trim().toUpperCase().includes('YA')) {

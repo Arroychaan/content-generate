@@ -1,37 +1,25 @@
-export async function callGemini(apiKey, prompt, model = 'gemini-3.5-flash', maxTokens = 1000) {
-  // Using standard Google Gemini API endpoint structure
-  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+import { GoogleGenAI } from '@google/genai';
 
-  const response = await fetch(endpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      contents: [{
-        parts: [{ text: prompt }]
-      }],
-      generationConfig: {
+export async function callGemini(apiKey, prompt, model = 'gemini-3.5-flash', maxTokens = 1000) {
+  try {
+    const ai = new GoogleGenAI({ apiKey });
+
+    const response = await ai.models.generate_content({
+      model: model,
+      contents: prompt,
+      config: {
         maxOutputTokens: maxTokens,
         temperature: 0.3
       }
-    })
-  });
+    });
 
-  if (response.status === 429) {
-    throw new Error('QUOTA_EXCEEDED');
-  }
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Gemini API Error: ${response.status} - ${errorText}`);
-  }
-
-  const data = await response.json();
-  try {
-    return data.candidates[0].content.parts[0].text;
-  } catch (e) {
-    console.error('Failed to parse Gemini response:', data);
-    throw new Error('Invalid response format from Gemini');
+    return response.text;
+  } catch (error) {
+    if (error.status === 429 || error.message?.includes('429') || error.message?.includes('quota')) {
+      throw new Error('QUOTA_EXCEEDED');
+    }
+    
+    console.error('Failed to parse Gemini response or SDK error:', error);
+    throw new Error(`Gemini API Error: ${error.message}`);
   }
 }

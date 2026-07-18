@@ -5,14 +5,17 @@ export async function execute(context = {}) {
   const parser = new Parser({
     customFields: {
       item: ['description', 'content:encoded', 'pubDate']
+    },
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
     }
   });
 
   const feeds = [
     'https://news.google.com/rss?hl=id&gl=ID&ceid=ID:id',
-    'https://news.kompas.com/rss/news.xml',
+    'https://www.antaranews.com/rss/terkini.xml',
     'https://rss.tempo.co/nasional',
-    'https://tirto.id/rss'
+    'https://www.cnbcindonesia.com/news/rss'
   ];
 
   let rawArticles = [];

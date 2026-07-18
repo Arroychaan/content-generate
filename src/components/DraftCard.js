@@ -17,25 +17,6 @@ export default function DraftCard({ draft, onPublishSuccess }) {
     if (onPublishSuccess) onPublishSuccess(draft.id);
   };
 
-  const handleCopyContent = () => {
-    if (activeTab === 'IG' && draft.main_caption) {
-      navigator.clipboard.writeText(draft.main_caption);
-      alert("Instagram caption copied!");
-    } else if (activeTab === 'X') {
-      const xPosts = draft.platform_variants?.x?.posts || draft.thread_posts || [];
-      if (xPosts.length > 0) {
-        navigator.clipboard.writeText(xPosts.join('\n\n'));
-        alert("X Thread copied!");
-      }
-    } else if (activeTab === 'THREADS') {
-      const threadsPosts = draft.platform_variants?.threads?.posts || [];
-      if (threadsPosts.length > 0) {
-        navigator.clipboard.writeText(threadsPosts.join('\n\n'));
-        alert("Threads copied!");
-      }
-    }
-  };
-
   const handleDownload = async () => {
     if (!draft.image_r2_url) return;
     try {
@@ -55,8 +36,6 @@ export default function DraftCard({ draft, onPublishSuccess }) {
     }
   };
 
-  const hasThread = draft.thread_posts && draft.thread_posts.length > 0;
-
   return (
     <div className="glass-card rounded-2xl p-5 flex flex-col gap-5 w-full transition-all duration-300 hover:shadow-2xl hover:shadow-blue-900/20 group relative overflow-hidden">
       
@@ -68,68 +47,89 @@ export default function DraftCard({ draft, onPublishSuccess }) {
         <h3 className="text-lg font-bold text-white line-clamp-2 leading-tight">
           {draft.topic_title}
         </h3>
-        <span className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider shrink-0 ${draft.content_type === 'IMAGE' ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30' : 'bg-green-500/20 text-green-300 border border-green-500/30'}`}>
+        <span className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider shrink-0 ${draft.content_type === 'IMAGE' ? 'bg-gradient-to-r from-pink-500/20 to-orange-500/20 text-pink-300 border border-pink-500/30' : 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-300 border border-blue-500/30'}`}>
           {draft.content_type === 'IMAGE' ? <ImageIcon className="w-3 h-3" /> : <Type className="w-3 h-3" />}
-          {draft.content_type}
+          {draft.content_type === 'IMAGE' ? 'Instagram' : 'X/Threads'}
         </span>
       </div>
-      
-      {/* Image Preview (if any) */}
-      {draft.image_r2_url && (
-        <div className="w-full aspect-[4/3] sm:aspect-square bg-black/40 rounded-xl overflow-hidden relative border border-white/5 shadow-inner">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img 
-            src={draft.image_r2_url} 
-            alt="Draft Preview" 
-            className="object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-700 ease-out"
-            loading="lazy"
-          />
+
+      {/* ----------------- INSTAGRAM VIEW (IMAGE) ----------------- */}
+      {draft.content_type === 'IMAGE' && (
+        <>
+          {draft.image_r2_url && (
+            <div className="w-full aspect-[4/3] sm:aspect-square bg-black/40 rounded-xl overflow-hidden relative border border-white/5 shadow-inner">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img 
+                src={draft.image_r2_url} 
+                alt="Draft Preview" 
+                className="object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-700 ease-out"
+                loading="lazy"
+              />
+            </div>
+          )}
+          
+          <div className="bg-black/20 rounded-lg p-3 border border-white/5 flex-grow relative group/text overflow-y-auto max-h-48">
+            <p className="text-gray-300 text-sm leading-relaxed font-mono text-[13px] whitespace-pre-wrap">
+              {draft.main_caption}
+            </p>
+            <button 
+              onClick={() => {
+                navigator.clipboard.writeText(draft.main_caption || '');
+                alert("Instagram caption copied!");
+              }}
+              className="absolute top-2 right-2 p-1.5 bg-black/50 hover:bg-white/20 rounded text-gray-300 transition-colors backdrop-blur-md opacity-0 group-hover/text:opacity-100"
+              title="Copy Caption"
+            >
+              <Copy className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </>
+      )}
+
+      {/* ----------------- X/THREADS VIEW (TEXT_ONLY) ----------------- */}
+      {draft.content_type !== 'IMAGE' && (
+        <div className="flex flex-col flex-grow gap-3">
+          <div className="flex bg-white/5 p-1 rounded-lg">
+            <button 
+              onClick={() => setActiveTab('THREADS')}
+              className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-all ${activeTab === 'THREADS' || activeTab === 'IG' ? 'bg-white/10 text-white shadow' : 'text-gray-400 hover:text-white'}`}
+            >
+              Threads (Max 480)
+            </button>
+            <button 
+              onClick={() => setActiveTab('X')}
+              className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-all ${activeTab === 'X' ? 'bg-white/10 text-white shadow' : 'text-gray-400 hover:text-white'}`}
+            >
+              X (Max 280)
+            </button>
+          </div>
+
+          <div className="bg-black/20 rounded-lg p-3 border border-white/5 flex-grow relative group/text overflow-y-auto max-h-48">
+            <p className="text-gray-300 text-sm leading-relaxed font-mono text-[13px] whitespace-pre-wrap">
+              {(activeTab === 'X' 
+                ? (draft.platform_variants?.x?.posts || draft.thread_posts || []) 
+                : (draft.platform_variants?.threads?.posts || [])).join('\n\n---\n\n')}
+            </p>
+            <button 
+              onClick={() => {
+                const posts = activeTab === 'X' 
+                  ? (draft.platform_variants?.x?.posts || draft.thread_posts || [])
+                  : (draft.platform_variants?.threads?.posts || []);
+                navigator.clipboard.writeText(posts.join('\n\n'));
+                alert(`${activeTab === 'X' ? 'X Thread' : 'Threads'} copied!`);
+              }}
+              className="absolute top-2 right-2 p-1.5 bg-black/50 hover:bg-white/20 rounded text-gray-300 transition-colors backdrop-blur-md opacity-0 group-hover/text:opacity-100"
+              title="Copy Thread"
+            >
+              <Copy className="w-3.5 h-3.5" />
+            </button>
+          </div>
         </div>
       )}
 
-      {/* Tabs for content versions */}
-      <div className="flex flex-col flex-grow gap-3">
-        <div className="flex bg-white/5 p-1 rounded-lg">
-          <button 
-            onClick={() => setActiveTab('IG')}
-            className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-all ${activeTab === 'IG' ? 'bg-white/10 text-white shadow' : 'text-gray-400 hover:text-white'}`}
-          >
-            Instagram
-          </button>
-          <button 
-            onClick={() => setActiveTab('X')}
-            className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-all ${activeTab === 'X' ? 'bg-white/10 text-white shadow' : 'text-gray-400 hover:text-white'}`}
-          >
-            X (Twitter)
-          </button>
-          <button 
-            onClick={() => setActiveTab('THREADS')}
-            className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-all ${activeTab === 'THREADS' ? 'bg-white/10 text-white shadow' : 'text-gray-400 hover:text-white'}`}
-          >
-            Threads
-          </button>
-        </div>
-
-        {/* Content Box */}
-        <div className="bg-black/20 rounded-lg p-3 border border-white/5 flex-grow relative group/text overflow-y-auto max-h-48">
-          <p className="text-gray-300 text-sm leading-relaxed font-mono text-[13px] whitespace-pre-wrap">
-            {activeTab === 'IG' ? draft.main_caption : 
-             activeTab === 'X' ? (draft.platform_variants?.x?.posts || draft.thread_posts || []).join('\n\n---\n\n') : 
-             (draft.platform_variants?.threads?.posts || []).join('\n\n---\n\n')}
-          </p>
-          <button 
-            onClick={handleCopyContent}
-            className="absolute top-2 right-2 p-1.5 bg-black/50 hover:bg-white/20 rounded text-gray-300 transition-colors backdrop-blur-md opacity-0 group-hover/text:opacity-100"
-            title="Copy Content"
-          >
-            <Copy className="w-3.5 h-3.5" />
-          </button>
-        </div>
-      </div>
-
       {/* Action Buttons */}
       <div className="flex gap-2 mt-auto">
-        {draft.image_r2_url && (
+        {draft.content_type === 'IMAGE' && draft.image_r2_url && (
           <button
             onClick={handleDownload}
             className="p-3.5 rounded-xl bg-white/10 text-white hover:bg-white/20 transition-all shadow-lg flex items-center justify-center active:scale-[0.98]"

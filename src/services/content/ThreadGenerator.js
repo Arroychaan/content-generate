@@ -9,11 +9,11 @@ export async function generateThreadsForPlatforms(topic, drafts) {
     Topik: ${drafts.title}
     Isi: ${drafts.caption}
     
-    Instruksi Utas X (Maksimal 270 karakter per post):
+    Instruksi Utas X (SANGAT KETAT: Maksimal 280 karakter per post, DILARANG LEBIH):
     - Buat 4-5 post.
     - Post 1 wajib diakhiri 🧵👇
     
-    Instruksi Utas Threads (Maksimal 480 karakter per post):
+    Instruksi Utas Threads (SANGAT KETAT: Maksimal 480 karakter per post, DILARANG LEBIH):
     - Buat 3-4 post yang lebih detail dan naratif.
     - Post 1 wajib diakhiri 🧵👇
     

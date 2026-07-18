@@ -115,7 +115,11 @@ async function processSingleTopic(topic) {
 
     currentStage = 12;
     // Stage 12: Cross-Platform Adapter (Deep Threads generation, etc)
-    draftContext.platformVariants = await CrossPlatformAdapter.execute(draftContext);
+    if (contentType === 'TEXT_ONLY') {
+      draftContext.platformVariants = await CrossPlatformAdapter.execute(draftContext);
+    } else {
+      draftContext.platformVariants = {};
+    }
     
     currentStage = 13;
     // Stage 13: Storage & Ingestion Sync

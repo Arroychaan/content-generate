@@ -1,18 +1,17 @@
 import { supabaseAdmin } from '../../lib/supabase';
-import { callGemini } from './GeminiClient';
 import { callGroq } from './GroqClient.js';
 import { sendTelegramNotification } from '../notification/TelegramNotifier';
 import { globalRateLimiter } from './RateLimiter';
 
-export async function generateTextWithRotation(prompt, model = 'gemini-3.5-flash', maxTokens = 1000) {
-  // Apply the 4.5s rate limit before processing
+export async function generateTextWithRotation(prompt, model = 'llama3-70b-8192', maxTokens = 1000) {
+  // Apply the 4.5s rate limit before processing to respect API rate limits
   await globalRateLimiter.wait();
 
   // Fetch ACTIVE keys ordered by LRU
   const { data: keys, error } = await supabaseAdmin
     .from('api_key_registry')
     .select('*')
-    .eq('provider', 'gemini')
+    .eq('provider', 'groq')
     .eq('status', 'ACTIVE')
     .order('last_used_at', { ascending: true, nullsFirst: true });
 
@@ -22,17 +21,18 @@ export async function generateTextWithRotation(prompt, model = 'gemini-3.5-flash
   }
 
   if (!keys || keys.length === 0) {
-    console.warn('All Gemini keys are blocked or none exist. Falling back to Groq.');
-    await sendTelegramNotification('LLM_FALLBACK', 'All Gemini keys blocked, using Groq fallback.');
-    return await callGroq(prompt, maxTokens);
+    const errorMsg = 'CRITICAL: No active Groq keys found in database. All keys might be blocked or missing.';
+    console.error(errorMsg);
+    await sendTelegramNotification('LLM_ERROR', errorMsg);
+    throw new Error(errorMsg);
   }
 
   // Iterate over available keys
   for (const keyRecord of keys) {
     try {
-      const apiKey = keyRecord.api_key_encrypted; // Assuming simple decryption or raw key storage for this MVP
+      const apiKey = keyRecord.api_key_encrypted; 
       
-      const response = await callGemini(apiKey, prompt, model, maxTokens);
+      const response = await callGroq(apiKey, prompt, model, maxTokens);
       
       // Update key metrics (last_used_at, usage count)
       await supabaseAdmin
@@ -46,7 +46,7 @@ export async function generateTextWithRotation(prompt, model = 'gemini-3.5-flash
       return response;
 
     } catch (apiError) {
-      if (apiError.message === 'QUOTA_EXCEEDED') {
+      if (apiError.message === 'QUOTA_EXCEEDED' || apiError.message.includes('429')) {
         // Block key until next day
         const tomorrow = new Date();
         tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
@@ -63,13 +63,14 @@ export async function generateTextWithRotation(prompt, model = 'gemini-3.5-flash
         console.warn(`Key ${keyRecord.id} Quota Exceeded. Blocked until ${tomorrow.toISOString()}`);
         continue; // Fallback to next key in loop without breaking pipeline
       } else {
-        throw apiError; // Other errors (e.g. network) should be handled by caller's exponential backoff
+        throw apiError; // Other errors (e.g. network, 403) should be handled by caller's exponential backoff
       }
     }
   }
 
   // If we reach here, all attempted active keys resulted in Quota Exceeded during this loop
-  console.warn('All attempted Gemini keys hit limit during execution. Falling back to Groq.');
-  await sendTelegramNotification('LLM_FALLBACK', 'Hit limits on all Gemini keys during loop, fallback to Groq.');
-  return await callGroq(prompt, maxTokens);
+  const exhaustedMsg = 'All attempted Groq keys hit rate limit during execution. Pipeline halted for this item.';
+  console.error(exhaustedMsg);
+  await sendTelegramNotification('LLM_EXHAUSTED', exhaustedMsg);
+  throw new Error(exhaustedMsg);
 }

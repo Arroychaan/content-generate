@@ -1,8 +1,6 @@
-export async function callGroq(prompt, maxTokens = 1000) {
-  const apiKey = process.env.GROQ_API_KEY;
-  
+export async function callGroq(apiKey, prompt, model = 'llama3-70b-8192', maxTokens = 1000) {
   if (!apiKey) {
-    throw new Error('GROQ_API_KEY is not defined');
+    throw new Error('API key is not defined');
   }
 
   // Groq API Endpoint (OpenAI compatible)
@@ -15,7 +13,7 @@ export async function callGroq(prompt, maxTokens = 1000) {
       'Authorization': `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: 'llama3-70b-8192', 
+      model: model, 
       messages: [
         {
           role: 'user',

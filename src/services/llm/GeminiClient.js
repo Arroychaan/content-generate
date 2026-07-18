@@ -4,7 +4,7 @@ export async function callGemini(apiKey, prompt, model = 'gemini-3.5-flash', max
   try {
     const ai = new GoogleGenAI({ apiKey });
 
-    const response = await ai.models.generate_content({
+    const response = await ai.models.generateContent({
       model: model,
       contents: prompt,
       config: {

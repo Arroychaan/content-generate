@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Share2, Image as ImageIcon, Type, Sparkles, Send, Copy, RefreshCw, Download } from 'lucide-react';
+import { Share2, Image as ImageIcon, Type, Sparkles, Send, Copy, RefreshCw, Download, Trash2 } from 'lucide-react';
 import { useWebShare } from '../hooks/useWebShare';
 
 function timeAgo(dateString) {
@@ -22,6 +22,7 @@ function timeAgo(dateString) {
 export default function DraftCard({ draft, onPublishSuccess }) {
   const { handlePublishOneClick, isSharing } = useWebShare();
   const [activeTab, setActiveTab] = useState('IG'); // 'IG' or 'X'
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handlePost = async () => {
     await handlePublishOneClick(
@@ -31,6 +32,22 @@ export default function DraftCard({ draft, onPublishSuccess }) {
       draft.image_r2_url
     );
     if (onPublishSuccess) onPublishSuccess(draft.id);
+  };
+
+  const handleDelete = async () => {
+    if (!window.confirm('Hapus draf ini permanen?')) return;
+    setIsDeleting(true);
+    try {
+      const res = await fetch(`/api/drafts/${draft.id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success && onPublishSuccess) {
+        onPublishSuccess(draft.id);
+      }
+    } catch (error) {
+      console.error('Delete failed:', error);
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const handleDownload = async () => {
@@ -164,6 +181,14 @@ export default function DraftCard({ draft, onPublishSuccess }) {
 
       {/* Action Buttons */}
       <div className="flex gap-2 mt-auto">
+        <button
+          onClick={handleDelete}
+          disabled={isDeleting}
+          className="p-3.5 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-all shadow-lg flex items-center justify-center active:scale-[0.98]"
+          title="Hapus Draft"
+        >
+          {isDeleting ? <RefreshCw className="w-5 h-5 animate-spin" /> : <Trash2 className="w-5 h-5" />}
+        </button>
         {draft.content_type === 'IMAGE' && draft.image_r2_url && (
           <button
             onClick={handleDownload}

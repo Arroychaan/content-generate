@@ -22,6 +22,11 @@ import * as StorageIngestionSync from '../agents/13_StorageIngestionSync';
 export async function runPipelineCycle(batchSize = parseInt(process.env.BATCH_SIZE_PER_CYCLE || '3')) {
   try {
     console.log(`Starting pipeline cycle with batch size ${batchSize}...`);
+    await supabaseAdmin.from('system_activity_logs').insert([{
+      event_type: 'PIPELINE_START',
+      message: `Starting pipeline cycle with batch size ${batchSize}...`,
+      agent_stage: 0
+    }]);
     
     // Stage 1: Ingestion
     const rawFeeds = await IngestionWorker.execute();
@@ -41,6 +46,11 @@ export async function runPipelineCycle(batchSize = parseInt(process.env.BATCH_SI
     }
 
     console.log('Pipeline cycle completed successfully.');
+    await supabaseAdmin.from('system_activity_logs').insert([{
+      event_type: 'PIPELINE_SUCCESS',
+      message: `Successfully processed ${selectedTopics.length} topics.`,
+      agent_stage: 13
+    }]);
   } catch (error) {
     console.error('Fatal Pipeline Error:', error);
     await sendTelegramNotification('PIPELINE_FATAL_ERROR', 'Entire pipeline cycle failed', error.message);
@@ -110,6 +120,12 @@ async function processSingleTopic(topic) {
     currentStage = 13;
     // Stage 13: Storage & Ingestion Sync
     await StorageIngestionSync.execute(draftContext);
+
+    await supabaseAdmin.from('system_activity_logs').insert([{
+      event_type: 'TOPIC_SUCCESS',
+      message: `Successfully generated content for: ${topic.title}`,
+      agent_stage: 13
+    }]);
 
   } catch (error) {
     console.error(`Error processing topic at stage ${currentStage}:`, error);

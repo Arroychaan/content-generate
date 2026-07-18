@@ -3,6 +3,22 @@ import { useState } from 'react';
 import { Share2, Image as ImageIcon, Type, Sparkles, Send, Copy, RefreshCw, Download } from 'lucide-react';
 import { useWebShare } from '../hooks/useWebShare';
 
+function timeAgo(dateString) {
+  if (!dateString) return '';
+  const now = new Date();
+  const past = new Date(dateString);
+  const diffMs = now - past;
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHour = Math.floor(diffMin / 60);
+  const diffDay = Math.floor(diffHour / 24);
+
+  if (diffDay > 0) return `${diffDay} hari yg lalu`;
+  if (diffHour > 0) return `${diffHour} jam yg lalu`;
+  if (diffMin > 0) return `${diffMin} menit yg lalu`;
+  return 'Baru saja';
+}
+
 export default function DraftCard({ draft, onPublishSuccess }) {
   const { handlePublishOneClick, isSharing } = useWebShare();
   const [activeTab, setActiveTab] = useState('IG'); // 'IG' or 'X'
@@ -44,9 +60,14 @@ export default function DraftCard({ draft, onPublishSuccess }) {
 
       {/* Header */}
       <div className="flex justify-between items-start gap-4">
-        <h3 className="text-lg font-bold text-white line-clamp-2 leading-tight">
-          {draft.topic_title}
-        </h3>
+        <div className="flex flex-col gap-1.5 flex-grow">
+          <h3 className="text-lg font-bold text-white line-clamp-2 leading-tight">
+            {draft.topic_title}
+          </h3>
+          <span className="text-xs text-gray-400 font-medium tracking-wide">
+            {timeAgo(draft.created_at)}
+          </span>
+        </div>
         <span className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider shrink-0 ${draft.content_type === 'IMAGE' ? 'bg-gradient-to-r from-pink-500/20 to-orange-500/20 text-pink-300 border border-pink-500/30' : 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-300 border border-blue-500/30'}`}>
           {draft.content_type === 'IMAGE' ? <ImageIcon className="w-3 h-3" /> : <Type className="w-3 h-3" />}
           {draft.content_type === 'IMAGE' ? 'Instagram' : 'X/Threads'}

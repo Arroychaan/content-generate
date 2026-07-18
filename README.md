@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ARproject - AI Autonomous Content Factory
 
-## Getting Started
+ARproject AI Autonomous Content Factory adalah sistem pabrikasi konten otomatis bertenaga kecerdasan buatan (AI) yang dirancang untuk meriset, menyusun, merender infografis, dan menyiapkan materi publikasi berita siap saji selama 24 jam sehari, 7 hari seminggu secara mandiri. 
 
-First, run the development server:
+Sistem ini didesain agar berjalan sepenuhnya di komputasi awan (*cloud serverless*), membebaskan komputer lokal Anda dari beban pemrosesan berat.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🌟 Konsep Utama & Fitur Non-Teknis
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 1. Tim Editorial AI Multi-Agen
+Sistem ini mempekerjakan serangkaian agen AI khusus yang bekerja berantai seperti sebuah kantor redaksi berita profesional:
+* **Pencari Berita:** Memantau tren dan portal berita nasional secara konstan.
+* **Penyaring Informasi:** Membuang berita duplikat dan memilih topik terhangat.
+* **Kurator Kualitas:** Menilai kelayakan berita berdasarkan dampak sosial dan aktualitas.
+* **Penulis Jurnalis:** Menyusun naskah berita dalam Bahasa Indonesia jurnalistik tingkat tinggi dengan struktur piramida terbalik yang mengalir natural.
+* **Kurator Visual:** Memilih foto latar belakang berlisensi resmi yang relevan secara otomatis.
+* **Desainer Grafis (Layout Engine):** Menggabungkan teks berita, masker kontras gelap, dan gambar latar menjadi poster infografis beresolusi tinggi dengan penempatan logo **ARproject**.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 2. Estetika Visual "Folkative Style"
+Semua gambar berita yang dihasilkan menggunakan Programmatic Layout Engine untuk menjaga konsistensi visual. Poster memiliki margin yang seimbang, kontras teks putih yang aman dibaca, serta bebas dari keganjilan visual yang biasa dihasilkan oleh kecerdasan buatan pembuat gambar generatif (seperti teks hancur atau objek aneh).
 
-## Learn More
+### 3. Skema Pertumbuhan Organik Anti-Spam
+* **Rasio Posting 2:1:** Untuk mencegah akun media sosial Anda dianggap sebagai bot/spam oleh algoritma, sistem menjadwalkan 2 postingan teks murni (breaking news/pemikiran singkat) untuk setiap 1 postingan gambar infografis.
+* **Utas Berantai (Deep Threads):** Informasi berita yang kompleks otomatis dipecah menjadi 6 rangkaian pos berantai (dari pembuka yang memikat, data statistik, analisis netral, hingga pertanyaan pemancing diskusi di kolom komentar).
 
-To learn more about Next.js, take a look at the following resources:
+### 4. Sistem Kebal Kegagalan & Hemat Biaya
+* **Rotasi Akun Pintar:** Memanfaatkan 5 akun gratis secara bergiliran agar sistem tidak berhenti bekerja akibat batasan kuota.
+* **Fallback Otomatis:** Memiliki sistem cadangan darurat yang murah jika akun utama habis.
+* **Janitor Kebersihan Data:** Otomatis menghapus log sistem dan gambar lama setiap 3 hari agar ruang penyimpanan cloud Anda tetap bersih, rapi, dan **gratis selamanya**.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 5. Dasbor Validasi Satu-Klik
+Anda memegang kendali penuh. Cukup buka dashboard web di ponsel pintar Anda setiap pagi, lihat draf-draf yang sudah matang sempurna, dan tekan satu tombol untuk menyalin caption sekaligus membuka aplikasi media sosial tujuan untuk langsung menerbitkan draf tersebut tanpa perlu menyunting lagi.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+*ARproject AI Autonomous Content Factory — Konsistensi produksi berita jurnalisme berkualitas tinggi secara otomatis.*
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

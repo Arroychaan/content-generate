@@ -3,7 +3,7 @@ import { supabaseAdmin } from '../../../../../lib/supabase';
 
 export async function POST(request, { params }) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     const { error } = await supabaseAdmin
       .from('content_drafts_registry')

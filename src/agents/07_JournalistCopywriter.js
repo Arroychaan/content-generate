@@ -47,7 +47,12 @@ export async function execute(draftContext = {}) {
     console.log(`Copywriter berhasil menyusun naskah untuk: ${drafts.title}`);
     return drafts;
   } catch (e) {
-    console.warn('Gagal memproses JSON dari Copywriter.', e.message);
-    throw new Error('Copywriter gagal menghasilkan format yang benar.');
+    console.warn('Gagal memproses JSON dari Copywriter, fallback menggunakan data awal.', e.message);
+    return {
+      title: topic.title,
+      subtitle: "Berita Terkini",
+      caption: researchData || topic.combined_description || "Informasi lebih lanjut belum tersedia saat ini.",
+      visual_keywords: ["news", "breaking", "update"]
+    };
   }
 }

@@ -32,7 +32,7 @@ export async function execute(draftContext = {}) {
 
   try {
     const jsonString = await withExponentialBackoff(
-      () => generateTextWithRotation(prompt, 'gemini-1.5-pro', 15)
+      () => generateTextWithRotation(prompt, 'llama-3.3-70b-versatile', 15)
     );
     
     // Membersihkan markdown JSON jika model tetap menambahkannya

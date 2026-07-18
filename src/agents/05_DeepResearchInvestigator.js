@@ -1,4 +1,4 @@
-import { callGroq } from '../services/llm/GroqClient.js';
+import { generateTextWithRotation } from '../services/llm/TokenRotator.js';
 import { withExponentialBackoff } from '../services/resilience/ExponentialBackoff';
 
 // Fungsi helper untuk mengambil teks dasar dari halaman web secara sederhana
@@ -51,7 +51,7 @@ export async function execute(draftContext = {}) {
 
   try {
     const researchData = await withExponentialBackoff(
-      () => callGroq(prompt)
+      () => generateTextWithRotation(prompt, 'llama-3.3-70b-versatile', 1000)
     );
     console.log(`Deep Research berhasil untuk topik: ${topic.title}`);
     return researchData;

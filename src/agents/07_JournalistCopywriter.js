@@ -18,7 +18,7 @@ export async function execute(draftContext = {}) {
     Instruksi:
     1. Judul Utama (title): Maks 60 karakter, punchy, memancing perhatian. Terjemahkan ke Bahasa Indonesia.
     2. Subjudul (subtitle): Maks 90 karakter, pelengkap judul, memberikan konteks. Terjemahkan ke Bahasa Indonesia.
-    3. Teks Gambar (image_text): MAKSIMAL 70 KARAKTER (DILARANG LEBIH). Ini akan dicetak melayang di atas gambar. Rangkum inti berita dengan gaya bahasa simpel/kasual ala media anak muda masa kini.
+    3. Teks Gambar (image_text): MINIMAL 70 KARAKTER dan MAKSIMAL 100 KARAKTER. Ini akan dicetak melayang di atas gambar. Rangkum inti berita dengan gaya bahasa simpel/kasual ala media anak muda masa kini.
     4. Caption (caption): Naskah berita gaya piramida terbalik. Panjang 3-4 paragraf. WAJIB DITULIS DALAM BAHASA INDONESIA baku namun mengalir. Jangan gunakan kata-kata AI generatif (seperti "Menariknya", "Kesimpulannya").
     5. Kata Kunci Visual (visual_keywords): 3 kata kunci BAHASA INGGRIS untuk mencari gambar stok HD (misal: "technology", "circuit", "smartphone").
 

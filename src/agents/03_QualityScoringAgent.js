@@ -23,7 +23,7 @@ export async function execute(uniqueTopics = []) {
 
     try {
       const result = await withExponentialBackoff(
-        () => generateTextWithRotation(prompt, 'gemini-2.5-flash', 10)
+        () => generateTextWithRotation(prompt, 'gemini-1.5-flash', 10)
       );
 
       const scoreMatch = result.match(/(\d+\.\d+|\d+)/);

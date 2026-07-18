@@ -21,7 +21,7 @@ export async function generateDeepThread(topic, drafts) {
 
   try {
     const jsonString = await withExponentialBackoff(
-      () => generateTextWithRotation(prompt, 'gemini-2.5-flash', 10)
+      () => generateTextWithRotation(prompt, 'gemini-1.5-flash', 10)
     );
     
     const cleanJsonStr = jsonString.replace(/```json/g, '').replace(/```/g, '').trim();

@@ -1,4 +1,4 @@
-export async function callGemini(apiKey, prompt, model = 'gemini-1.5-flash', maxTokens = 1000) {
+export async function callGemini(apiKey, prompt, model = 'gemini-3.5-flash', maxTokens = 1000) {
   // Using standard Google Gemini API endpoint structure
   const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 

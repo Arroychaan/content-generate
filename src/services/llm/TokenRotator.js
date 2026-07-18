@@ -4,7 +4,7 @@ import { callDeepSeek } from './DeepSeekClient';
 import { sendTelegramNotification } from '../notification/TelegramNotifier';
 import { globalRateLimiter } from './RateLimiter';
 
-export async function generateTextWithRotation(prompt, model = 'gemini-1.5-flash', maxTokens = 1000) {
+export async function generateTextWithRotation(prompt, model = 'gemini-3.5-flash', maxTokens = 1000) {
   // Apply the 4.5s rate limit before processing
   await globalRateLimiter.wait();
 

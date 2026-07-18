@@ -58,7 +58,7 @@ export default function Home() {
           <div className="flex items-center gap-3 mb-2">
             <LayoutDashboard className="w-8 h-8 text-blue-400" />
             <h1 className="text-3xl md:text-4xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
-              ARproject
+              Sector-One
             </h1>
           </div>
           <p className="text-gray-400 text-sm md:text-base font-medium">Content Factory Dashboard &bull; AI Agentic Pipeline</p>

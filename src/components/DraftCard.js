@@ -25,7 +25,7 @@ export default function DraftCard({ draft, onPublishSuccess }) {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `arproject-content-${draft.id}.png`;
+      a.download = `sector-one-content-${draft.id}.png`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);

@@ -7,7 +7,7 @@ export async function sendTelegramNotification(eventType, message, errorLog = ''
     return;
   }
 
-  const text = `🚨 ARproject Content Factory Alert 🚨\n\nEvent: ${eventType}\nMessage: ${message}\nError Details: ${errorLog}`;
+  const text = `🚨 Sector-One Content Factory Alert 🚨\n\nEvent: ${eventType}\nMessage: ${message}\nError Details: ${errorLog}`;
 
   try {
     const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {

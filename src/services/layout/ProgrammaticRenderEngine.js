@@ -64,7 +64,7 @@ export async function renderProgrammaticImage(title, subtitle, backgroundImageUr
                       borderBottom: '4px solid #ffffff',
                       paddingBottom: '8px'
                     },
-                    children: "ARproject"
+                    children: "Sector-One"
                   }
                 },
                 // Title (Dynamic sizing logic handled externally or by Satori flex)

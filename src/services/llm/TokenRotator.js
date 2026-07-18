@@ -46,11 +46,20 @@ export async function generateTextWithRotation(prompt, model = 'llama-3.3-70b-ve
       return response;
 
     } catch (apiError) {
-      if (apiError.message === 'QUOTA_EXCEEDED' || apiError.message.includes('429')) {
+      const errorMsg = apiError.message || '';
+      if (errorMsg === 'QUOTA_EXCEEDED' || errorMsg.includes('429')) {
         console.warn(`Key ${keyRecord.id} Quota/Rate Limit Exceeded. Trying next key if available...`);
         continue; // Fallback to next key in loop without breaking pipeline
+      } else if (errorMsg.includes('401') || errorMsg.includes('403') || errorMsg.toLowerCase().includes('unauthorized') || errorMsg.toLowerCase().includes('forbidden') || errorMsg.toLowerCase().includes('invalid api key')) {
+        console.error(`Key ${keyRecord.id} appears to be BANNED or INVALID. Auto-disabling it...`);
+        // Auto-disable the banned key so we don't try it again next time
+        await supabaseAdmin
+          .from('api_key_registry')
+          .update({ status: 'BLOCKED' })
+          .eq('id', keyRecord.id);
+        continue; // Skip to the next key
       } else {
-        throw apiError; // Other errors (e.g. network, 403) should be handled by caller's exponential backoff
+        throw apiError; // Other errors (e.g. network) should be handled by caller's exponential backoff
       }
     }
   }

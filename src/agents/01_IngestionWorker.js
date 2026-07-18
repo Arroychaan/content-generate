@@ -14,7 +14,7 @@ export async function execute(context = {}) {
   const feeds = [
     'https://news.google.com/rss?hl=id&gl=ID&ceid=ID:id',
     'https://www.antaranews.com/rss/terkini.xml',
-    'https://rss.tempo.co/nasional',
+    'https://www.republika.co.id/rss',
     'https://www.cnbcindonesia.com/news/rss'
   ];
 

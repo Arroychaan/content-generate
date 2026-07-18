@@ -1,20 +1,9 @@
 import satori from 'satori';
 import { Resvg } from '@resvg/resvg-js';
-import fs from 'fs';
-import path from 'path';
+import { robotoBoldBase64, robotoRegularBase64 } from './fonts.js';
 
-const robotoBoldPath = path.join(process.cwd(), 'node_modules/@fontsource/roboto/files/roboto-latin-700-normal.woff');
-const robotoRegularPath = path.join(process.cwd(), 'node_modules/@fontsource/roboto/files/roboto-latin-400-normal.woff');
-
-let robotoBoldBuffer = null;
-let robotoRegularBuffer = null;
-
-try {
-  robotoBoldBuffer = fs.readFileSync(robotoBoldPath);
-  robotoRegularBuffer = fs.readFileSync(robotoRegularPath);
-} catch (e) {
-  console.warn("Fonts not found locally, Satori might fail or use system defaults if not handled.");
-}
+let robotoBoldBuffer = Buffer.from(robotoBoldBase64, 'base64');
+let robotoRegularBuffer = Buffer.from(robotoRegularBase64, 'base64');
 
 export async function renderProgrammaticImage(title, subtitle, backgroundImageUrl) {
   // Satori HTML to SVG template (React elements equivalent structure)

@@ -104,25 +104,39 @@ export default function DraftCard({ draft, onPublishSuccess }) {
             </button>
           </div>
 
-          <div className="bg-black/20 rounded-lg p-3 border border-white/5 flex-grow relative group/text overflow-y-auto max-h-48">
-            <p className="text-gray-300 text-sm leading-relaxed font-mono text-[13px] whitespace-pre-wrap">
-              {(activeTab === 'X' 
+          <div className="flex-grow overflow-y-auto max-h-[350px] pr-2 space-y-3 custom-scrollbar">
+            {(() => {
+              const posts = activeTab === 'X' 
                 ? (draft.platform_variants?.x?.posts || draft.thread_posts || []) 
-                : (draft.platform_variants?.threads?.posts || [])).join('\n\n---\n\n')}
-            </p>
-            <button 
-              onClick={() => {
-                const posts = activeTab === 'X' 
-                  ? (draft.platform_variants?.x?.posts || draft.thread_posts || [])
-                  : (draft.platform_variants?.threads?.posts || []);
-                navigator.clipboard.writeText(posts.join('\n\n'));
-                alert(`${activeTab === 'X' ? 'X Thread' : 'Threads'} copied!`);
-              }}
-              className="absolute top-2 right-2 p-1.5 bg-black/50 hover:bg-white/20 rounded text-gray-300 transition-colors backdrop-blur-md opacity-0 group-hover/text:opacity-100"
-              title="Copy Thread"
-            >
-              <Copy className="w-3.5 h-3.5" />
-            </button>
+                : (draft.platform_variants?.threads?.posts || []);
+              
+              if (!posts || posts.length === 0) {
+                return <p className="text-gray-500 text-sm italic">Belum ada utas tersedia.</p>;
+              }
+
+              return posts.map((post, idx) => (
+                <div key={idx} className="bg-black/30 rounded-xl p-4 border border-white/5 relative group/post hover:bg-black/40 transition-colors">
+                  <div className="flex justify-between items-start mb-2">
+                    <span className="text-xs font-bold text-gray-500">
+                      {idx === 0 ? 'Utas Utama (Hook)' : `Utas ${idx + 1}`}
+                    </span>
+                    <button 
+                      onClick={() => {
+                        navigator.clipboard.writeText(post);
+                        alert(`Post ${idx + 1} disalin!`);
+                      }}
+                      className="p-1.5 bg-white/5 hover:bg-white/20 rounded-md text-gray-400 hover:text-white transition-colors"
+                      title="Salin Post Ini Saja"
+                    >
+                      <Copy className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                  <p className="text-gray-200 text-[13px] leading-relaxed font-mono whitespace-pre-wrap">
+                    {post}
+                  </p>
+                </div>
+              ));
+            })()}
           </div>
         </div>
       )}

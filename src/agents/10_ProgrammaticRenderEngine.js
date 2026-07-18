@@ -14,8 +14,7 @@ export async function execute(draftContext = {}) {
     // (Dalam implementasi ini, Satori sudah dibungkus dengan default mask/font di servicenya, 
     // tetapi bisa diperluas untuk menerima layoutParams secara penuh)
     const imageBuffer = await renderProgrammaticImage(
-      drafts.title,
-      drafts.subtitle,
+      drafts.image_text || drafts.title,
       stockImage
     );
     

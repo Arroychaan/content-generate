@@ -5,7 +5,7 @@ import { robotoBoldBase64, robotoRegularBase64 } from './fonts.js';
 let robotoBoldBuffer = Buffer.from(robotoBoldBase64, 'base64');
 let robotoRegularBuffer = Buffer.from(robotoRegularBase64, 'base64');
 
-export async function renderProgrammaticImage(title, subtitle, backgroundImageUrl) {
+export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
   // Satori HTML to SVG template (React elements equivalent structure)
   const svg = await satori(
     {
@@ -45,9 +45,12 @@ export async function renderProgrammaticImage(title, subtitle, backgroundImageUr
               style: {
                 display: 'flex',
                 flexDirection: 'column',
-                padding: '60px', // Minimum padding
+                padding: '60px',
                 position: 'relative',
                 zIndex: 10,
+                alignItems: 'center', // Center content horizontally
+                justifyContent: 'center', // Center content vertically
+                height: '100%',
               },
               children: [
                 // Top micro logo / category
@@ -56,7 +59,7 @@ export async function renderProgrammaticImage(title, subtitle, backgroundImageUr
                   props: {
                     style: {
                       position: 'absolute',
-                      top: '-700px', // Pushed to top visually
+                      top: '60px',
                       left: '60px',
                       fontSize: '32px',
                       fontWeight: 'bold',
@@ -64,33 +67,24 @@ export async function renderProgrammaticImage(title, subtitle, backgroundImageUr
                       borderBottom: '4px solid #ffffff',
                       paddingBottom: '8px'
                     },
-                    children: "Sector-One"
+                    children: "Sector One"
                   }
                 },
-                // Title (Dynamic sizing logic handled externally or by Satori flex)
+                // Folkative-style Text Box
                 {
                   type: 'div',
                   props: {
                     style: {
-                      fontSize: title.length > 50 ? '72px' : '96px',
+                      backgroundColor: 'rgba(255, 140, 0, 0.5)',
+                      padding: '40px 60px',
+                      borderRadius: '16px',
+                      fontSize: '64px',
                       fontWeight: 'bold',
-                      lineHeight: 1.2,
-                      marginBottom: '24px',
+                      lineHeight: 1.3,
+                      textAlign: 'center',
+                      maxWidth: '900px',
                     },
-                    children: title
-                  }
-                },
-                // Subtitle
-                {
-                  type: 'div',
-                  props: {
-                    style: {
-                      fontSize: '48px',
-                      fontFamily: 'Roboto, sans-serif',
-                      lineHeight: 1.4,
-                      opacity: 0.9
-                    },
-                    children: subtitle
+                    children: imageText
                   }
                 }
               ]

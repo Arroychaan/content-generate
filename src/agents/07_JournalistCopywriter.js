@@ -16,13 +16,14 @@ export async function execute(draftContext = {}) {
     ${qaFeedback ? `PERHATIAN (Revisi dari QA): ${qaFeedback}` : ''}
     
     Instruksi:
-    1. Judul Utama (title): Maks 60 karakter, punchy, memancing perhatian. Terjemahkan ke Bahasa Indonesia.
-    2. Subjudul (subtitle): Maks 90 karakter, pelengkap judul, memberikan konteks. Terjemahkan ke Bahasa Indonesia.
-    3. Teks Gambar (image_text): MINIMAL 70 KARAKTER dan MAKSIMAL 100 KARAKTER. Ini akan dicetak melayang di atas gambar. Rangkum inti berita dengan gaya bahasa simpel/kasual ala media anak muda masa kini.
-    4. Caption (caption): Naskah berita gaya piramida terbalik. Panjang 3-4 paragraf. WAJIB DITULIS DALAM BAHASA INDONESIA baku namun mengalir. Jangan gunakan kata-kata AI generatif (seperti "Menariknya", "Kesimpulannya").
-    5. Kata Kunci Visual (visual_keywords): 3 kata kunci BAHASA INGGRIS untuk mencari gambar stok HD (misal: "technology", "circuit", "smartphone").
+    1. Judul Utama (title): Maks 60 karakter, punchy, memancing perhatian. WAJIB BAHASA INDONESIA.
+    2. Subjudul (subtitle): Maks 90 karakter, pelengkap judul, memberikan konteks. WAJIB BAHASA INDONESIA.
+    3. Teks Gambar (image_text): MINIMAL 70 KARAKTER dan MAKSIMAL 100 KARAKTER. WAJIB BAHASA INDONESIA. Ini akan dicetak melayang di atas gambar. Rangkum inti berita dengan gaya bahasa simpel/kasual ala media anak muda masa kini.
+    4. Caption (caption): Naskah berita gaya piramida terbalik. Panjang 3-4 paragraf. WAJIB BAHASA INDONESIA. Naskah harus sangat enak dibaca, berbobot, dan mudah dipahami. Jika ada istilah teknis atau bahasa asing, WAJIB jelaskan artinya dengan bahasa yang sangat sederhana.
+    5. Kata Kunci Visual (visual_keywords): 3 kata kunci BAHASA INGGRIS untuk mencari gambar stok HD. WAJIB tambahkan kata "retro" atau "vintage" agar nuansa gambarnya klasik (misal: "technology retro", "vintage computer", "retro smartphone").
 
     ATURAN SANGAT KETAT (CRITICAL): 
+    - SELURUH OUTPUT (kecuali visual_keywords) WAJIB 100% BAHASA INDONESIA MESKIPUN SUMBER BERITA DARI LUAR NEGERI. Jangan gunakan bahasa campuran.
     - DILARANG KERAS BERHALUSINASI! Anda HANYA boleh menuliskan fakta yang secara eksplisit ada di dalam teks riset mentah.
     - DILARANG menambahkan kutipan palsu, angka, statistik, atau nama entitas yang tidak disebutkan di dalam riset.
     - Jika teks riset ambigu, gunakan bahasa netral tanpa menebak-nebak detailnya. Pelanggaran terhadap aturan ini akan membuat sistem QA GAGAL!

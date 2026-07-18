@@ -15,7 +15,33 @@ export async function execute(draftContext = {}) {
   };
 
   try {
-    const threadData = await generateThreadsForPlatforms(topic, drafts);
+    const prompt = `
+    Anda adalah Ahli Strategi Media Sosial (CrossPlatformAdapter).
+    Tugas Anda adalah memecah teks dasar menjadi utas (threads) yang siap posting.
+    
+    Teks Dasar:
+    "${draftContext.drafts.caption}"
+
+    ATURAN X (TWITTER):
+    - Pecah menjadi array of string.
+    - Setiap item adalah 1 cuitan (maks 270 karakter per cuitan).
+    - Cuitan pertama harus berupa Hook/Clickbait yang memancing rasa penasaran.
+    - WAJIB 100% BAHASA INDONESIA. Jika ada istilah teknis, jelaskan secara singkat.
+    - Bahasa harus enak dibaca, berbobot, dan mudah dipahami.
+    
+    ATURAN THREADS (META):
+    - Pecah menjadi array of string.
+    - Setiap item adalah 1 postingan (maks 480 karakter per postingan).
+    - Postingan pertama harus Hook.
+    - Gunakan formatting kasual tapi informatif.
+    - WAJIB 100% BAHASA INDONESIA. Jelaskan istilah teknis dengan sederhana.
+    - Bahasa harus enak dibaca, berbobot, dan mudah dipahami.
+
+    ATURAN SANGAT KETAT:
+    - Seluruh cuitan WAJIB BAHASA INDONESIA murni, meskipun berita asli dari luar negeri.
+    - Jangan pernah mengubah FAKTA dari teks dasar.`;
+
+    const threadData = await generateThreadsForPlatforms(topic, drafts, prompt);
     platformVariants.x = { posts: threadData.x };
     platformVariants.threads = { posts: threadData.threads };
     console.log(`CrossPlatformAdapter berhasil menyusun varian platform.`);

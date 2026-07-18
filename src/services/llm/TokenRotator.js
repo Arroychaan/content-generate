@@ -47,20 +47,7 @@ export async function generateTextWithRotation(prompt, model = 'llama-3.3-70b-ve
 
     } catch (apiError) {
       if (apiError.message === 'QUOTA_EXCEEDED' || apiError.message.includes('429')) {
-        // Block key until next day
-        const tomorrow = new Date();
-        tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
-        tomorrow.setUTCHours(0, 0, 0, 0);
-
-        await supabaseAdmin
-          .from('api_key_registry')
-          .update({
-            status: 'BLOCKED',
-            blocked_until: tomorrow.toISOString()
-          })
-          .eq('id', keyRecord.id);
-        
-        console.warn(`Key ${keyRecord.id} Quota Exceeded. Blocked until ${tomorrow.toISOString()}`);
+        console.warn(`Key ${keyRecord.id} Quota/Rate Limit Exceeded. Trying next key if available...`);
         continue; // Fallback to next key in loop without breaking pipeline
       } else {
         throw apiError; // Other errors (e.g. network, 403) should be handled by caller's exponential backoff

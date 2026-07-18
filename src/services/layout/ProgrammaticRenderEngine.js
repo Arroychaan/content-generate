@@ -3,15 +3,15 @@ import { Resvg } from '@resvg/resvg-js';
 import fs from 'fs';
 import path from 'path';
 
-const interBoldPath = path.join(process.cwd(), 'public/fonts/Inter-Bold.woff2');
-const helveticaPath = path.join(process.cwd(), 'public/fonts/HelveticaNeue.woff2');
+const robotoBoldPath = path.join(process.cwd(), 'public/fonts/Roboto-Bold.ttf');
+const robotoRegularPath = path.join(process.cwd(), 'public/fonts/Roboto-Regular.ttf');
 
-let interBoldBuffer = null;
-let helveticaBuffer = null;
+let robotoBoldBuffer = null;
+let robotoRegularBuffer = null;
 
 try {
-  interBoldBuffer = fs.readFileSync(interBoldPath);
-  helveticaBuffer = fs.readFileSync(helveticaPath);
+  robotoBoldBuffer = fs.readFileSync(robotoBoldPath);
+  robotoRegularBuffer = fs.readFileSync(robotoRegularPath);
 } catch (e) {
   console.warn("Fonts not found locally, Satori might fail or use system defaults if not handled.");
 }
@@ -31,7 +31,7 @@ export async function renderProgrammaticImage(title, subtitle, backgroundImageUr
           backgroundImage: `url(${backgroundImageUrl})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          fontFamily: 'Inter, sans-serif',
+          fontFamily: 'Roboto, sans-serif',
           color: '#ffffff', // Solid white text for safety
         },
         children: [
@@ -97,7 +97,7 @@ export async function renderProgrammaticImage(title, subtitle, backgroundImageUr
                   props: {
                     style: {
                       fontSize: '48px',
-                      fontFamily: 'Helvetica Neue, sans-serif',
+                      fontFamily: 'Roboto, sans-serif',
                       lineHeight: 1.4,
                       opacity: 0.9
                     },
@@ -115,14 +115,14 @@ export async function renderProgrammaticImage(title, subtitle, backgroundImageUr
       height: 1080,
       fonts: [
         {
-          name: 'Inter',
-          data: interBoldBuffer || new ArrayBuffer(0),
+          name: 'Roboto',
+          data: robotoBoldBuffer || new ArrayBuffer(0),
           weight: 700,
           style: 'normal',
         },
         {
-          name: 'Helvetica Neue',
-          data: helveticaBuffer || new ArrayBuffer(0),
+          name: 'Roboto',
+          data: robotoRegularBuffer || new ArrayBuffer(0),
           weight: 400,
           style: 'normal',
         }

@@ -14,8 +14,8 @@ export async function execute(draftContext = {}) {
     if (contentType === 'IMAGE' && renderedImageBuffer) {
       const fileName = `content-${Date.now()}.png`;
       const uploadResult = await uploadToR2(renderedImageBuffer, fileName);
-      r2Url = uploadResult.publicUrl;
-      r2Key = fileName;
+      r2Url = uploadResult.url;
+      r2Key = uploadResult.key;
       console.log(`Gambar berhasil diunggah ke R2: ${r2Url}`);
     }
 

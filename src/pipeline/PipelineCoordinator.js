@@ -1,8 +1,8 @@
-import { withExponentialBackoff } from '../resilience/ExponentialBackoff';
-import { generateTextWithRotation } from '../llm/TokenRotator';
-import { supabaseAdmin } from '../../lib/supabase';
-import { sendTelegramNotification } from '../notification/TelegramNotifier';
-import { checkNextContentType } from '../scheduling/ContentQueueManager';
+import { withExponentialBackoff } from '../services/resilience/ExponentialBackoff';
+import { generateTextWithRotation } from '../services/llm/TokenRotator';
+import { supabaseAdmin } from '../lib/supabase';
+import { sendTelegramNotification } from '../services/notification/TelegramNotifier';
+import { checkNextContentType } from '../services/scheduling/ContentQueueManager';
 
 // Import all 13 agents (mock implementation structure for now)
 import * as IngestionWorker from '../agents/01_IngestionWorker';

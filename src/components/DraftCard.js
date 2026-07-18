@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Share2, Image as ImageIcon, Type, Sparkles, Send, Copy, RefreshCw } from 'lucide-react';
+import { Share2, Image as ImageIcon, Type, Sparkles, Send, Copy, RefreshCw, Download } from 'lucide-react';
 import { useWebShare } from '../hooks/useWebShare';
 
 export default function DraftCard({ draft, onPublishSuccess }) {
@@ -21,6 +21,25 @@ export default function DraftCard({ draft, onPublishSuccess }) {
     if (draft.thread_posts && draft.thread_posts.length > 0) {
       navigator.clipboard.writeText(draft.thread_posts.join('\n\n'));
       alert("X Thread copied to clipboard!");
+    }
+  };
+
+  const handleDownload = async () => {
+    if (!draft.image_r2_url) return;
+    try {
+      const response = await fetch(draft.image_r2_url);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `arproject-content-${draft.id}.png`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Download failed, opening in new tab:', error);
+      window.open(draft.image_r2_url, '_blank');
     }
   };
 
@@ -92,21 +111,32 @@ export default function DraftCard({ draft, onPublishSuccess }) {
         </div>
       </div>
 
-      {/* Action Button */}
-      <button
-        onClick={handlePost}
-        disabled={isSharing}
-        className="w-full py-3.5 px-4 mt-auto rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold hover:from-blue-500 hover:to-indigo-500 transition-all shadow-lg hover:shadow-blue-500/25 disabled:opacity-50 flex items-center justify-center gap-2 active:scale-[0.98]"
-      >
-        {isSharing ? (
-          <RefreshCw className="w-5 h-5 animate-spin" />
-        ) : (
-          <>
-            <Share2 className="w-5 h-5" />
-            <span>Post & Share</span>
-          </>
+      {/* Action Buttons */}
+      <div className="flex gap-2 mt-auto">
+        {draft.image_r2_url && (
+          <button
+            onClick={handleDownload}
+            className="p-3.5 rounded-xl bg-white/10 text-white hover:bg-white/20 transition-all shadow-lg flex items-center justify-center active:scale-[0.98]"
+            title="Download Image"
+          >
+            <Download className="w-5 h-5" />
+          </button>
         )}
-      </button>
+        <button
+          onClick={handlePost}
+          disabled={isSharing}
+          className="flex-1 py-3.5 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold hover:from-blue-500 hover:to-indigo-500 transition-all shadow-lg hover:shadow-blue-500/25 disabled:opacity-50 flex items-center justify-center gap-2 active:scale-[0.98]"
+        >
+          {isSharing ? (
+            <RefreshCw className="w-5 h-5 animate-spin" />
+          ) : (
+            <>
+              <Share2 className="w-5 h-5" />
+              <span>Post & Share</span>
+            </>
+          )}
+        </button>
+      </div>
     </div>
   );
 }

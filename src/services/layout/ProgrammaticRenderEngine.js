@@ -3,8 +3,8 @@ import { Resvg } from '@resvg/resvg-js';
 import fs from 'fs';
 import path from 'path';
 
-const robotoBoldPath = path.join(process.cwd(), 'public/fonts/Roboto-Bold.ttf');
-const robotoRegularPath = path.join(process.cwd(), 'public/fonts/Roboto-Regular.ttf');
+const robotoBoldPath = path.join(process.cwd(), 'node_modules/@fontsource/roboto/files/roboto-latin-700-normal.woff');
+const robotoRegularPath = path.join(process.cwd(), 'node_modules/@fontsource/roboto/files/roboto-latin-400-normal.woff');
 
 let robotoBoldBuffer = null;
 let robotoRegularBuffer = null;

@@ -29,11 +29,17 @@ export async function execute(draftContext = {}) {
     Caption: ${drafts.caption}
     
     Instruksi:
-    Apakah draf ini menyimpang dari fakta sumber? Apakah ada salah ketik yang fatal? Apakah bahasanya terlalu robotik?
+    Apakah draf ini menyimpang secara fatal dari fakta sumber? Apakah ada salah ketik yang memalukan? Apakah bahasanya terlalu robotik?
+    
+    ATURAN EVALUASI:
+    - TOLERANSI penyederhanaan: Jika draf merangkum kalimat atau tidak menyebutkan angka/skor spesifik secara detail (namun tetap benar secara konteks), maka itu SAH dan LULUS.
+    - TOLERANSI gaya bahasa: Jurnalis boleh menggunakan gaya bahasa dramatis atau naratif selama esensi faktanya tidak berubah.
+    - GAGALKAN HANYA JIKA: Draf secara eksplisit menyebutkan angka, nama, atau kutipan yang 100% salah atau mengarang fakta yang tidak ada di sumber sama sekali.
+
     Balas HANYA dengan format JSON:
     {
       "passed": true_atau_false,
-      "feedback": "alasan jika false, kosongkan jika true"
+      "feedback": "alasan spesifik jika false, kosongkan jika true"
     }
   `;
 

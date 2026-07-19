@@ -6,6 +6,21 @@ let robotoBoldBuffer = Buffer.from(robotoBoldBase64, 'base64');
 let robotoRegularBuffer = Buffer.from(robotoRegularBase64, 'base64');
 
 export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
+  let finalBgImage = backgroundImageUrl;
+  if (backgroundImageUrl && backgroundImageUrl.startsWith('http')) {
+    try {
+      const res = await fetch(backgroundImageUrl);
+      if (res.ok) {
+        const arrayBuffer = await res.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+        const contentType = res.headers.get('content-type') || 'image/jpeg';
+        finalBgImage = `data:${contentType};base64,${buffer.toString('base64')}`;
+      }
+    } catch (e) {
+      console.warn('Failed to pre-fetch background image:', e.message);
+    }
+  }
+
   // Satori HTML to SVG template (React elements equivalent structure)
   const svg = await satori(
     {
@@ -17,7 +32,7 @@ export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
           justifyContent: 'flex-end', // Align text to bottom
           width: '1080px',
           height: '1080px',
-          backgroundImage: `url(${backgroundImageUrl})`,
+          backgroundImage: `url(${finalBgImage})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           fontFamily: 'Roboto, sans-serif',
@@ -36,7 +51,7 @@ export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
                 bottom: 0,
                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
               },
-              children: backgroundImageUrl ? [
+              children: finalBgImage ? [
                 // Vintage/Retro tint overlay
                 {
                   type: 'div',

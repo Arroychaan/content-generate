@@ -18,8 +18,11 @@ export async function execute(draftContext = {}) {
     Instruksi:
     1. Judul Utama (title): Maks 60 karakter, punchy, memancing perhatian. WAJIB BAHASA INDONESIA.
     2. Subjudul (subtitle): Maks 90 karakter, pelengkap judul, memberikan konteks. WAJIB BAHASA INDONESIA.
-    3. Teks Gambar (image_text): MINIMAL 70 KARAKTER dan MAKSIMAL 100 KARAKTER. WAJIB BAHASA INDONESIA. Ini akan dicetak melayang di atas gambar. Rangkum inti berita dengan gaya bahasa simpel/kasual ala media anak muda masa kini.
-    4. Caption (caption): Naskah berita gaya piramida terbalik. Panjang 3-4 paragraf. WAJIB BAHASA INDONESIA. Naskah harus sangat enak dibaca, berbobot, dan mudah dipahami. Jika ada istilah teknis atau bahasa asing, WAJIB jelaskan artinya dengan bahasa yang sangat sederhana.
+    3. Teks Gambar (image_text): MINIMAL 60 KARAKTER dan MAKSIMAL 100 KARAKTER. WAJIB BAHASA INDONESIA. Ini akan dicetak melayang di atas gambar. Rangkum inti berita dengan gaya bahasa simpel/kasual ala media anak muda masa kini.
+    4. Caption (caption): Naskah berita. WAJIB BAHASA INDONESIA. Gaya bahasa: KASUAL & TAJAM (seperti Folkative / USS Feed, gunakan frasa seperti "Gini loh..", "Kebayang nggak?", "Gokil!"). 
+       - Paragraf 1: HOOK (Pertanyaan memancing atau fakta mengejutkan).
+       - Paragraf 2-3: Isi berita utama. Jika ada istilah teknis, WAJIB jelaskan dengan analogi sehari-hari yang sangat sederhana.
+       - Paragraf 4: Kesimpulan atau pertanyaan lemparan ke netizen. Naskah harus sangat enak dibaca dan berbobot.
     5. Kata Kunci Visual (visual_keywords): 3 kata kunci BAHASA INGGRIS. Jangan hanya menyebut nama perusahaan. Pikirkan VISUAL FISIK yang merepresentasikan berita tersebut secara akurat. Jika berita tentang Amazon AWS, gunakan "server room" atau "data center". Jika tentang baterai mobil listrik, gunakan "electric car battery". Jika tentang AI, gunakan "robotics" atau "futuristic technology". Ini bertujuan agar mesin pencari gambar dapat menemukan foto fisik yang sangat relevan.
 
     ATURAN SANGAT KETAT (CRITICAL): 

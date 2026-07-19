@@ -25,17 +25,17 @@ export async function execute(draftContext = {}) {
     ATURAN X (TWITTER):
     - Pecah menjadi array of string.
     - Setiap item adalah 1 cuitan (maks 270 karakter per cuitan).
-    - Cuitan pertama harus berupa Hook/Clickbait yang memancing rasa penasaran.
-    - WAJIB 100% BAHASA INDONESIA. Jika ada istilah teknis, jelaskan secara singkat.
-    - Bahasa harus enak dibaca, berbobot, dan mudah dipahami.
+    - Cuitan pertama WAJIB berupa Hook yang memancing rasa penasaran, diakhiri dengan emoji benang 🧵 atau 👇.
+    - Cuitan tengah dilarang berupa wall-of-text. Gunakan poin-poin (bullet points) singkat dan spasi antar kalimat agar mudah dibaca cepat.
+    - Cuitan terakhir WAJIB berisi opini singkat atau pertanyaan memancing diskusi (Call to Action/Discussion).
+    - Gaya bahasa: KASUAL & TAJAM (seperti Folkative / USS Feed, gunakan "Gini loh..", "Kebayang nggak?", "Gokil!"). WAJIB 100% BAHASA INDONESIA. Jelaskan istilah teknis dengan sederhana.
     
     ATURAN THREADS (META):
     - Pecah menjadi array of string.
     - Setiap item adalah 1 postingan (maks 480 karakter per postingan).
-    - Postingan pertama harus Hook.
-    - Gunakan formatting kasual tapi informatif.
-    - WAJIB 100% BAHASA INDONESIA. Jelaskan istilah teknis dengan sederhana.
-    - Bahasa harus enak dibaca, berbobot, dan mudah dipahami.
+    - Postingan pertama harus Hook yang memancing interaksi.
+    - Gunakan formatting kasual tapi informatif, banyak spasi agar enak di-skim.
+    - Gaya bahasa: KASUAL & TAJAM (Folkative / USS Feed style). WAJIB 100% BAHASA INDONESIA. Jelaskan istilah teknis dengan sederhana.
 
     ATURAN SANGAT KETAT:
     - Seluruh cuitan WAJIB BAHASA INDONESIA murni, meskipun berita asli dari luar negeri.

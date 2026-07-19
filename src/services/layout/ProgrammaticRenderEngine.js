@@ -55,6 +55,21 @@ export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
           paddingBottom: '80px', // Lift the card slightly
         },
         children: [
+          // Aesthetic Filter: Very subtle dark overlay to make the photo pop and look premium
+          {
+            type: 'div',
+            props: {
+              style: {
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                display: 'flex',
+                backgroundColor: 'rgba(10, 10, 15, 0.25)', // Subtle cool-dark filter
+              }
+            }
+          },
           // Elegant Floating White Card
           {
             type: 'div',
@@ -62,11 +77,11 @@ export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
               style: {
                 display: 'flex',
                 flexDirection: 'column',
-                backgroundColor: 'rgba(255, 255, 255, 0.95)', // 95% opacity pristine white
-                padding: '60px',
-                borderRadius: '32px',
+                backgroundColor: 'rgba(255, 255, 255, 0.98)', // Premium frosted white
+                padding: '64px',
+                borderRadius: '36px',
                 width: '920px',
-                boxShadow: '0 20px 60px rgba(0, 0, 0, 0.15)', // Premium soft shadow
+                boxShadow: '0 30px 80px rgba(0, 0, 0, 0.25)', // Rich deep shadow
               },
               children: [
                 // Editorial Badge

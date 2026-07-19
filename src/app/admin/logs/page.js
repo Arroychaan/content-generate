@@ -49,6 +49,22 @@ export default function LogsDashboard() {
     return 'bg-blue-500/20 text-blue-400 border-blue-500/30'; // Info
   };
 
+  const getSystemStatus = () => {
+    if (logs.length === 0) return { label: 'RESTING', color: 'bg-blue-500/20 text-blue-400 border-blue-500/30', dot: 'bg-blue-400' };
+    
+    const lastPipelineEvent = logs.find(l => 
+      l.event_type === 'PIPELINE_START' || 
+      l.event_type === 'PIPELINE_SUCCESS' || 
+      l.event_type === 'PIPELINE_FATAL_ERROR'
+    );
+    
+    if (lastPipelineEvent && lastPipelineEvent.event_type === 'PIPELINE_START') {
+      return { label: 'WORKING', color: 'bg-green-500/20 text-green-400 border-green-500/30', dot: 'bg-green-400 animate-pulse' };
+    }
+    
+    return { label: 'RESTING / SLEEP', color: 'bg-blue-500/20 text-blue-400 border-blue-500/30', dot: 'bg-blue-400' };
+  };
+
   if (!isAuthenticated) {
     return (
       <main className="min-h-screen bg-mesh text-white p-4 flex items-center justify-center">
@@ -97,6 +113,14 @@ export default function LogsDashboard() {
             <div className="flex items-center gap-3 mb-2">
               <ShieldCheck className="w-8 h-8 text-green-400" />
               <h1 className="text-3xl font-black tracking-tight text-white">System Logs</h1>
+              
+              {/* AI Status Badge */}
+              {logs.length > 0 && (
+                <div className={`ml-2 px-3 py-1 rounded-full text-[11px] font-bold tracking-widest border flex items-center gap-2 ${getSystemStatus().color}`}>
+                  <span className={`w-2 h-2 rounded-full ${getSystemStatus().dot}`}></span>
+                  {getSystemStatus().label}
+                </div>
+              )}
             </div>
             <p className="text-gray-400 text-sm">Real-time monitoring for AI autonomous agents.</p>
           </div>

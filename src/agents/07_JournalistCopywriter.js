@@ -20,7 +20,7 @@ export async function execute(draftContext = {}) {
     2. Subjudul (subtitle): Maks 90 karakter, pelengkap judul, memberikan konteks. WAJIB BAHASA INDONESIA.
     3. Teks Gambar (image_text): MINIMAL 70 KARAKTER dan MAKSIMAL 100 KARAKTER. WAJIB BAHASA INDONESIA. Ini akan dicetak melayang di atas gambar. Rangkum inti berita dengan gaya bahasa simpel/kasual ala media anak muda masa kini.
     4. Caption (caption): Naskah berita gaya piramida terbalik. Panjang 3-4 paragraf. WAJIB BAHASA INDONESIA. Naskah harus sangat enak dibaca, berbobot, dan mudah dipahami. Jika ada istilah teknis atau bahasa asing, WAJIB jelaskan artinya dengan bahasa yang sangat sederhana.
-    5. Kata Kunci Visual (visual_keywords): 3 kata kunci BAHASA INGGRIS untuk mencari gambar stok HD. WAJIB tambahkan kata "aesthetic", "minimalist", atau "clean" agar nuansa gambarnya estetik berkelas (misal: "technology aesthetic minimalist", "smartphone clean photography").
+    5. Kata Kunci Visual (visual_keywords): 3 kata kunci BAHASA INGGRIS. Kata kunci PERTAMA WAJIB merupakan entitas utama/subjek spesifik dari berita (misal: "Amazon logo", "Elon Musk", "Apple iPhone", "Delivery box"). Kata kunci kedua dan ketiga boleh menggunakan "aesthetic" atau "minimalist". Ini sangat penting agar gambar yang muncul relevan dan tidak melenceng.
 
     ATURAN SANGAT KETAT (CRITICAL): 
     - SELURUH OUTPUT (kecuali visual_keywords) WAJIB 100% BAHASA INDONESIA MESKIPUN SUMBER BERITA DARI LUAR NEGERI. Jangan gunakan bahasa campuran.

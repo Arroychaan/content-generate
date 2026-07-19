@@ -19,6 +19,18 @@ export async function fetchStockImage(keywords = []) {
       const data = await unsplashRes.value.json();
       if (data.results && data.results.length > 0) {
         imageUrl = data.results[0].urls.raw + '&w=1080&q=80&fit=crop';
+      } else if (keywords.length > 1) {
+        // Fallback: cari hanya dengan keyword pertama (entitas utama) agar lebih akurat jika query gabungan gagal
+        const entityQuery = encodeURIComponent(keywords[0]);
+        const fallbackRes = await fetch(`https://api.unsplash.com/search/photos?query=${entityQuery}&orientation=portrait&per_page=1`, {
+          headers: { Authorization: `Client-ID ${unsplashKey}` }
+        });
+        if (fallbackRes.ok) {
+          const fbData = await fallbackRes.json();
+          if (fbData.results && fbData.results.length > 0) {
+            imageUrl = fbData.results[0].urls.raw + '&w=1080&q=80&fit=crop';
+          }
+        }
       }
     }
 

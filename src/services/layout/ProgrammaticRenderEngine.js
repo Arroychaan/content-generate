@@ -1,9 +1,22 @@
 import satori from 'satori';
 import { Resvg } from '@resvg/resvg-js';
-import { robotoBoldBase64, robotoRegularBase64 } from './fonts.js';
+import { robotoBoldBase64 } from './fonts.js';
 
 let robotoBoldBuffer = Buffer.from(robotoBoldBase64, 'base64');
-let robotoRegularBuffer = Buffer.from(robotoRegularBase64, 'base64');
+let oswaldBoldBuffer = null;
+
+async function getOswaldFont() {
+  if (oswaldBoldBuffer) return oswaldBoldBuffer;
+  try {
+    const res = await fetch('https://fonts.gstatic.com/s/oswald/v57/TK3_WkUHHAIjg75cFRf3bXL8LICs1xZogUE.ttf');
+    const arrayBuffer = await res.arrayBuffer();
+    oswaldBoldBuffer = Buffer.from(arrayBuffer);
+    return oswaldBoldBuffer;
+  } catch (e) {
+    console.warn('Failed to load Oswald font, falling back to Roboto', e.message);
+    return robotoBoldBuffer;
+  }
+}
 
 export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
   let finalBgImage = backgroundImageUrl;
@@ -21,6 +34,8 @@ export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
     }
   }
 
+  const fontData = await getOswaldFont();
+
   // Satori HTML to SVG template (React elements equivalent structure)
   const svg = await satori(
     {
@@ -29,17 +44,17 @@ export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
         style: {
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'flex-end', // Align text to bottom
+          justifyContent: 'flex-end',
           width: '1080px',
           height: '1080px',
           backgroundImage: `url(${finalBgImage})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          fontFamily: 'Roboto, sans-serif',
-          color: '#ffffff', // Solid white text for safety
+          fontFamily: 'Oswald, sans-serif',
+          color: '#ffffff',
         },
         children: [
-          // Overlay Mask 40%
+          // Cinematic dark gradient from bottom (0%) to top (100%)
           {
             type: 'div',
             props: {
@@ -50,39 +65,26 @@ export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
                 right: 0,
                 bottom: 0,
                 display: 'flex',
-                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                backgroundImage: 'linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.6) 40%, rgba(0, 0, 0, 0) 100%)',
               },
-              children: finalBgImage ? {
-                // Vintage/Retro tint overlay
-                type: 'div',
-                props: {
-                  style: {
-                    position: 'absolute',
-                    top: 0, left: 0, right: 0, bottom: 0,
-                    display: 'flex',
-                    backgroundColor: 'rgba(120, 60, 20, 0.3)', // Warm vintage sepia tint
-                    zIndex: 1,
-                  }
-                }
-              } : null
             }
           },
-          // Overlay and Content Wrapper
+          // Content Layout
           {
             type: 'div',
             props: {
               style: {
                 display: 'flex',
                 flexDirection: 'column',
-                padding: '60px',
+                padding: '80px',
                 position: 'relative',
                 zIndex: 10,
-                alignItems: 'center', // Center content horizontally
-                justifyContent: 'center', // Center content vertically
+                alignItems: 'flex-start', // Left align
+                justifyContent: 'flex-end', 
                 height: '100%',
               },
               children: [
-                // Top micro logo / category
+                // Minimalist Top Badge
                 {
                   type: 'div',
                   props: {
@@ -90,30 +92,56 @@ export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
                       position: 'absolute',
                       top: '60px',
                       left: '60px',
-                      fontSize: '32px',
-                      fontWeight: 'bold',
-                      color: '#ffffff',
-                      borderBottom: '4px solid #ffffff',
-                      paddingBottom: '8px'
+                      display: 'flex',
+                      alignItems: 'center',
+                      backgroundColor: '#ffffff',
+                      padding: '10px 20px',
+                      borderRadius: '4px',
                     },
-                    children: "Sector One"
+                    children: [
+                      {
+                        type: 'span',
+                        props: {
+                          style: {
+                            fontSize: '24px',
+                            fontWeight: 'bold',
+                            color: '#000000',
+                            letterSpacing: '2px',
+                            textTransform: 'uppercase'
+                          },
+                          children: "SECTOR ONE"
+                        }
+                      }
+                    ]
                   }
                 },
-                // Folkative-style Text Box
+                // Typography / Headline
                 {
                   type: 'div',
                   props: {
                     style: {
-                      backgroundColor: 'rgba(255, 140, 0, 0.8)', // 80% Opacity Orange
-                      padding: '40px 60px',
-                      borderRadius: '16px',
-                      fontSize: '64px',
+                      fontSize: '76px', // Massive text
                       fontWeight: 'bold',
-                      lineHeight: 1.3,
-                      textAlign: 'center',
-                      maxWidth: '900px',
+                      lineHeight: 1.15,
+                      textAlign: 'left',
+                      textTransform: 'uppercase', // Hypebeast signature
+                      letterSpacing: '-1px', // Tight letter spacing
+                      textShadow: '0px 4px 20px rgba(0,0,0,0.8)', // Depth
                     },
                     children: imageText
+                  }
+                },
+                // Accent Line
+                {
+                  type: 'div',
+                  props: {
+                    style: {
+                      marginTop: '40px',
+                      width: '120px',
+                      height: '8px',
+                      backgroundColor: '#ffffff',
+                      boxShadow: '0px 2px 10px rgba(0,0,0,0.5)',
+                    }
                   }
                 }
               ]
@@ -127,22 +155,15 @@ export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
       height: 1080,
       fonts: [
         {
-          name: 'Roboto',
-          data: robotoBoldBuffer || new ArrayBuffer(0),
+          name: 'Oswald',
+          data: fontData,
           weight: 700,
-          style: 'normal',
-        },
-        {
-          name: 'Roboto',
-          data: robotoRegularBuffer || new ArrayBuffer(0),
-          weight: 400,
           style: 'normal',
         }
       ],
     }
   );
 
-  // Convert SVG to PNG using Resvg
   const resvg = new Resvg(svg, {
     background: 'rgba(0,0,0,1)',
     fitTo: { mode: 'original' }

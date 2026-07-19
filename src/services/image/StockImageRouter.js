@@ -15,17 +15,17 @@ export async function fetchStockImage(keywords = []) {
 
     let imageUrl = null;
 
-    if (pixabayRes.status === 'fulfilled' && pixabayRes.value.ok) {
-      const data = await pixabayRes.value.json();
-      if (data.hits && data.hits.length > 0) {
-        imageUrl = data.hits[0].largeImageURL; // HD resolution up to 1280px
+    if (unsplashRes.status === 'fulfilled' && unsplashRes.value.ok) {
+      const data = await unsplashRes.value.json();
+      if (data.results && data.results.length > 0) {
+        imageUrl = data.results[0].urls.raw + '&w=1080&q=80&fit=crop';
       }
     }
 
-    if (!imageUrl && unsplashRes.status === 'fulfilled' && unsplashRes.value.ok) {
-      const data = await unsplashRes.value.json();
-      if (data.results && data.results.length > 0) {
-        imageUrl = data.results[0].urls.regular;
+    if (!imageUrl && pixabayRes.status === 'fulfilled' && pixabayRes.value.ok) {
+      const data = await pixabayRes.value.json();
+      if (data.hits && data.hits.length > 0) {
+        imageUrl = data.hits[0].largeImageURL; // HD resolution up to 1280px
       }
     }
 

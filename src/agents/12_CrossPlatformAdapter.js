@@ -23,7 +23,7 @@ export async function execute(draftContext = {}) {
     "${draftContext.drafts.caption}"
 
     ATURAN X (TWITTER):
-    - Pecah menjadi array of string.
+    - Pecah menjadi array of string. WAJIB MINIMAL 3 CUITAN.
     - Setiap item adalah 1 cuitan (maks 270 karakter per cuitan).
     - Cuitan pertama WAJIB berupa Hook yang memancing rasa penasaran, diakhiri dengan emoji benang 🧵 atau 👇.
     - Cuitan tengah dilarang berupa wall-of-text. Gunakan poin-poin (bullet points) singkat dan spasi antar kalimat agar mudah dibaca cepat.
@@ -31,15 +31,17 @@ export async function execute(draftContext = {}) {
     - Gaya bahasa: KASUAL & TAJAM (seperti Folkative / USS Feed, gunakan "Gini loh..", "Kebayang nggak?", "Gokil!"). WAJIB 100% BAHASA INDONESIA. Jelaskan istilah teknis dengan sederhana.
     
     ATURAN THREADS (META):
-    - Pecah menjadi array of string.
+    - Pecah menjadi array of string. WAJIB MINIMAL 3 POSTINGAN.
     - Setiap item adalah 1 postingan (maks 480 karakter per postingan).
     - Postingan pertama harus Hook yang memancing interaksi.
     - Gunakan formatting kasual tapi informatif, banyak spasi agar enak di-skim.
     - Gaya bahasa: KASUAL & TAJAM (Folkative / USS Feed style). WAJIB 100% BAHASA INDONESIA. Jelaskan istilah teknis dengan sederhana.
+    - WAJIB buat minimal 3 postingan (pembuka, isi, penutup).
 
     ATURAN SANGAT KETAT:
     - Seluruh cuitan WAJIB BAHASA INDONESIA murni, meskipun berita asli dari luar negeri.
-    - Jangan pernah mengubah FAKTA dari teks dasar.`;
+    - Jangan pernah mengubah FAKTA dari teks dasar.
+    - PENTING: Jika menggunakan enter/spasi kosong, pastikan Anda menuliskannya sebagai \\n di dalam format JSON.`;
 
     const threadData = await generateThreadsForPlatforms(topic, drafts, prompt);
     platformVariants.x = { posts: threadData.x };

@@ -47,7 +47,7 @@ export async function generateThreadsForPlatforms(topic, drafts, customPrompt = 
     throw new Error('Hasil bukan format X dan Threads yang valid');
   } catch (e) {
     console.warn('Gagal generate thread via LLM, menggunakan fallback.', e.message);
-    const fallback = drafts.title + '\\n\\n' + drafts.caption.substring(0, 200) + '...\\n\\nBaca selengkapnya di utas berikut.';
+    const fallback = drafts.title + '\n\n' + drafts.caption.substring(0, 200) + '...\n\nBaca selengkapnya di utas berikut.';
     return { x: [fallback], threads: [fallback] };
   }
 }

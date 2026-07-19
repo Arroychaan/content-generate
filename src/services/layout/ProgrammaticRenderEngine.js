@@ -49,22 +49,22 @@ export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
                 left: 0,
                 right: 0,
                 bottom: 0,
+                display: 'flex',
                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
               },
-              children: finalBgImage ? [
+              children: finalBgImage ? {
                 // Vintage/Retro tint overlay
-                {
-                  type: 'div',
-                  props: {
-                    style: {
-                      position: 'absolute',
-                      top: 0, left: 0, right: 0, bottom: 0,
-                      backgroundColor: 'rgba(120, 60, 20, 0.3)', // Warm vintage sepia tint
-                      zIndex: 1,
-                    }
+                type: 'div',
+                props: {
+                  style: {
+                    position: 'absolute',
+                    top: 0, left: 0, right: 0, bottom: 0,
+                    display: 'flex',
+                    backgroundColor: 'rgba(120, 60, 20, 0.3)', // Warm vintage sepia tint
+                    zIndex: 1,
                   }
                 }
-              ] : null
+              } : null
             }
           },
           // Overlay and Content Wrapper

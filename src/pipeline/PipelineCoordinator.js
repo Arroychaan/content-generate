@@ -18,6 +18,7 @@ import * as ProgrammaticRenderEngine from '../agents/10_ProgrammaticRenderEngine
 import * as AutonomousQASpecialist from '../agents/11_AutonomousQASpecialist';
 import * as CrossPlatformAdapter from '../agents/12_CrossPlatformAdapter';
 import * as StorageIngestionSync from '../agents/13_StorageIngestionSync';
+import * as AutonomousPublisher from '../agents/14_AutonomousPublisher';
 
 export async function runPipelineCycle(batchSize = parseInt(process.env.BATCH_SIZE_PER_CYCLE || '3')) {
   try {
@@ -123,12 +124,20 @@ async function processSingleTopic(topic) {
     
     currentStage = 13;
     // Stage 13: Storage & Ingestion Sync
-    await StorageIngestionSync.execute(draftContext);
+    const stage13Result = await StorageIngestionSync.execute(draftContext);
+    draftContext.dbRecordId = stage13Result.dbRecordId;
+    draftContext.imageR2Url = stage13Result.imageR2Url;
+
+    if (contentType === 'IMAGE') {
+      currentStage = 14;
+      // Stage 14: Autonomous Publisher
+      await AutonomousPublisher.execute(draftContext);
+    }
 
     await supabaseAdmin.from('system_activity_logs').insert([{
       event_type: 'TOPIC_SUCCESS',
       message: `Successfully generated content for: ${topic.title}`,
-      agent_stage: 13
+      agent_stage: currentStage
     }]);
 
   } catch (error) {

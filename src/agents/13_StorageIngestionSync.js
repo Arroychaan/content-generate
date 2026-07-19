@@ -33,14 +33,14 @@ export async function execute(draftContext = {}) {
         content_type: contentType,
         status: 'READY'
       }
-    ]);
+    ]).select();
 
     if (error) {
       throw error;
     }
 
     console.log(`Draf untuk "${drafts.title}" berhasil disimpan di database dan siap dipublikasikan.`);
-    return true;
+    return { dbRecordId: data[0].id, imageR2Url: r2Url };
 
   } catch (e) {
     console.error('StorageIngestionSync gagal:', e);

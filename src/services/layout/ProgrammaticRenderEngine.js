@@ -1,9 +1,22 @@
 import satori from 'satori';
 import { Resvg } from '@resvg/resvg-js';
-import { robotoBoldBase64, robotoRegularBase64 } from './fonts.js';
+import { robotoBoldBase64 } from './fonts.js';
 
 let robotoBoldBuffer = Buffer.from(robotoBoldBase64, 'base64');
-let robotoRegularBuffer = Buffer.from(robotoRegularBase64, 'base64');
+let interFontBuffer = null;
+
+async function getInterFont() {
+  if (interFontBuffer) return interFontBuffer;
+  try {
+    const res = await fetch('https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf');
+    const arrayBuffer = await res.arrayBuffer();
+    interFontBuffer = Buffer.from(arrayBuffer);
+    return interFontBuffer;
+  } catch (e) {
+    console.warn('Failed to load Inter font, falling back to Roboto', e.message);
+    return robotoBoldBuffer;
+  }
+}
 
 export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
   let finalBgImage = backgroundImageUrl;
@@ -21,7 +34,9 @@ export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
     }
   }
 
-  // Satori HTML to SVG template (React elements equivalent structure)
+  const fontData = await getInterFont();
+
+  // Satori HTML to SVG template (Minimalist Elegance Design)
   const svg = await satori(
     {
       type: 'div',
@@ -29,89 +44,79 @@ export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
         style: {
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'flex-end', // Align text to bottom
+          alignItems: 'center',
+          justifyContent: 'flex-end', // Align card to bottom
           width: '1080px',
           height: '1080px',
           backgroundImage: `url(${finalBgImage})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          fontFamily: 'Roboto, sans-serif',
-          color: '#ffffff', // Solid white text for safety
+          fontFamily: 'Inter, sans-serif',
+          paddingBottom: '80px', // Lift the card slightly
         },
         children: [
-          // Overlay Mask 40%
-          {
-            type: 'div',
-            props: {
-              style: {
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                display: 'flex',
-                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              },
-              children: finalBgImage ? {
-                // Vintage/Retro tint overlay
-                type: 'div',
-                props: {
-                  style: {
-                    position: 'absolute',
-                    top: 0, left: 0, right: 0, bottom: 0,
-                    display: 'flex',
-                    backgroundColor: 'rgba(120, 60, 20, 0.3)', // Warm vintage sepia tint
-                    zIndex: 1,
-                  }
-                }
-              } : null
-            }
-          },
-          // Overlay and Content Wrapper
+          // Elegant Floating White Card
           {
             type: 'div',
             props: {
               style: {
                 display: 'flex',
                 flexDirection: 'column',
+                backgroundColor: 'rgba(255, 255, 255, 0.95)', // 95% opacity pristine white
                 padding: '60px',
-                position: 'relative',
-                zIndex: 10,
-                alignItems: 'center', // Center content horizontally
-                justifyContent: 'center', // Center content vertically
-                height: '100%',
+                borderRadius: '32px',
+                width: '920px',
+                boxShadow: '0 20px 60px rgba(0, 0, 0, 0.15)', // Premium soft shadow
               },
               children: [
-                // Top micro logo / category
+                // Editorial Badge
                 {
                   type: 'div',
                   props: {
                     style: {
-                      position: 'absolute',
-                      top: '60px',
-                      left: '60px',
-                      fontSize: '32px',
-                      fontWeight: 'bold',
-                      color: '#ffffff',
-                      borderBottom: '4px solid #ffffff',
-                      paddingBottom: '8px'
+                      display: 'flex',
+                      alignItems: 'center',
+                      marginBottom: '24px',
                     },
-                    children: "Sector One"
+                    children: [
+                      {
+                        type: 'div',
+                        props: {
+                          style: {
+                            width: '4px',
+                            height: '20px',
+                            backgroundColor: '#000000',
+                            marginRight: '12px',
+                            borderRadius: '2px',
+                          }
+                        }
+                      },
+                      {
+                        type: 'span',
+                        props: {
+                          style: {
+                            fontSize: '20px',
+                            fontWeight: 'bold',
+                            color: '#555555',
+                            letterSpacing: '3px',
+                            textTransform: 'uppercase',
+                          },
+                          children: "SECTOR ONE"
+                        }
+                      }
+                    ]
                   }
                 },
-                // Folkative-style Text Box
+                // Headline Text
                 {
                   type: 'div',
                   props: {
                     style: {
-                      backgroundColor: 'rgba(255, 140, 0, 0.8)', // 80% Opacity Orange
-                      padding: '40px 60px',
-                      borderRadius: '16px',
-                      fontSize: '64px',
-                      fontWeight: 'bold',
-                      lineHeight: 1.3,
-                      textAlign: 'center',
-                      maxWidth: '900px',
+                      fontSize: '52px',
+                      fontWeight: 600,
+                      color: '#111111', // Jet black for contrast
+                      lineHeight: 1.4,
+                      letterSpacing: '-0.5px',
                     },
                     children: imageText
                   }
@@ -127,15 +132,9 @@ export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
       height: 1080,
       fonts: [
         {
-          name: 'Roboto',
-          data: robotoBoldBuffer || new ArrayBuffer(0),
-          weight: 700,
-          style: 'normal',
-        },
-        {
-          name: 'Roboto',
-          data: robotoRegularBuffer || new ArrayBuffer(0),
-          weight: 400,
+          name: 'Inter',
+          data: fontData,
+          weight: 600,
           style: 'normal',
         }
       ],
@@ -144,7 +143,7 @@ export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
 
   // Convert SVG to PNG using Resvg
   const resvg = new Resvg(svg, {
-    background: 'rgba(0,0,0,1)',
+    background: 'rgba(255,255,255,1)',
     fitTo: { mode: 'original' }
   });
   

@@ -30,8 +30,12 @@ export async function execute(context = {}) {
         // Gabungkan description & content:encoded untuk mendapatkan summary terpanjang
         const desc = item.contentSnippet || item['content:encoded'] || item.description || '';
         
-        // Filter: Tolak berita jika deskripsi kurang dari 100 karakter
-        if (desc.length >= 100) {
+        // Cek umur berita dalam jam
+        const pubDateObj = new Date(item.pubDate || new Date().toISOString());
+        const hoursAgo = (Date.now() - pubDateObj.getTime()) / (1000 * 60 * 60);
+        
+        // Filter: Tolak berita jika deskripsi kurang dari 100 karakter ATAU lebih tua dari 3 jam (Real-time strict)
+        if (desc.length >= 100 && hoursAgo <= 3) {
           rawArticles.push({
             title: item.title,
             link: item.link,

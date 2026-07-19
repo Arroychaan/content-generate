@@ -53,15 +53,16 @@ export default function DraftCard({ draft, onPublishSuccess }) {
   const handleDownload = async () => {
     if (!draft.image_r2_url) return;
     try {
-      const response = await fetch(draft.image_r2_url);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
+      // Menggunakan proxy API untuk melewati masalah CORS R2 dan memaksa unduhan
+      const filename = `sector-one-content-${draft.id}.png`;
+      const downloadUrl = `/api/download?url=${encodeURIComponent(draft.image_r2_url)}&filename=${encodeURIComponent(filename)}`;
+      
       const a = document.createElement('a');
-      a.href = url;
-      a.download = `sector-one-content-${draft.id}.png`;
+      a.href = downloadUrl;
+      // download attribute might still be ignored if cross-origin, but our proxy forces Content-Disposition header
+      a.download = filename;
       document.body.appendChild(a);
       a.click();
-      window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (error) {
       console.error('Download failed, opening in new tab:', error);

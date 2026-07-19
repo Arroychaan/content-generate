@@ -29,15 +29,16 @@ export async function execute(draftContext = {}) {
     ATURAN X (TWITTER):
     - Pecah menjadi array of string. WAJIB MINIMAL 3 CUITAN.
     - Setiap item adalah 1 cuitan (maks 270 karakter per cuitan).
-    - Cuitan pertama WAJIB berupa Hook to-the-point tanpa basa-basi AI, diakhiri emoji 🧵 atau 👇.
+    - Cuitan pertama WAJIB berupa Hook bercerita yang memancing rasa penasaran, diakhiri emoji 🧵 atau 👇.
     - Cuitan tengah dilarang berupa wall-of-text. Gunakan poin-poin singkat jika perlu.
-    - Cuitan terakhir WAJIB berisi opini skeptis/tajam atau pertanyaan ke netizen.
+    - Cuitan terakhir WAJIB berisi kesimpulan cerita atau punchline tajam. DILARANG BERTANYA ("Bagaimana menurutmu?", "Pernah ngalamin?"). Murni bercerita.
     
     ATURAN THREADS (META):
     - Pecah menjadi array of string. WAJIB MINIMAL 3 POSTINGAN.
     - Setiap item adalah 1 postingan (maks 480 karakter per postingan).
-    - Postingan pertama harus Hook tanpa basa-basi AI.
+    - Postingan pertama harus Hook bercerita.
     - Gunakan formatting organik.
+    - Cuitan penutup murni bercerita/fakta penutup, DILARANG BERTANYA.
     - WAJIB buat minimal 3 postingan (pembuka, isi, penutup).
 
     ATURAN ANTI-AI SANGAT KETAT (CRITICAL):

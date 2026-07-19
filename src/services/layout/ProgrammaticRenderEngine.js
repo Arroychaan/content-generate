@@ -52,7 +52,7 @@ export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           fontFamily: 'Inter, sans-serif',
-          paddingBottom: '80px', // Lift the card slightly
+          paddingBottom: '240px', // Lift the card slightly up towards the center
         },
         children: [
           // Aesthetic Filter: Very subtle dark overlay to make the photo pop and look premium
@@ -127,10 +127,10 @@ export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
                   type: 'div',
                   props: {
                     style: {
-                      fontSize: '52px',
+                      fontSize: '64px',
                       fontWeight: 600,
                       color: '#111111', // Jet black for contrast
-                      lineHeight: 1.4,
+                      lineHeight: 1.35,
                       letterSpacing: '-0.5px',
                     },
                     children: imageText

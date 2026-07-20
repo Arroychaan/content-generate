@@ -19,18 +19,13 @@ export async function execute(draftContext = {}) {
     1. Judul Utama (title): Maks 60 karakter, punchy, memancing perhatian. WAJIB BAHASA INDONESIA.
     2. Subjudul (subtitle): Maks 90 karakter, pelengkap judul, memberikan konteks. WAJIB BAHASA INDONESIA.
     3. Teks Gambar (image_text): MINIMAL 80 KARAKTER dan MAKSIMAL 110 KARAKTER. WAJIB BAHASA INDONESIA. Ini akan dicetak melayang di atas gambar. Rangkum inti berita dengan gaya bahasa kasual.
-    4. Caption (caption): Naskah berita. WAJIB BAHASA INDONESIA. 
-       - CONTOH GAYA PENULISAN YANG BENAR (WAJIB DITIRU IRAMANYA):
-         "Baterai bocor udah jadi ketakutan terbesar buat yang mau beli mobil listrik. Tapi startup ini baru aja ngenalin baterai solid-state yang diklaim gak bakal meledak walau ditusuk paku. Bedanya apa sama baterai biasa? Singkatnya, kalau baterai HP lo itu cairan, yang ini bentuknya padat. Lebih aman, lebih tahan lama."
-       - Paragraf 1: HOOK (Pertanyaan memancing atau fakta mengejutkan langsung to-the-point).
-       - Paragraf 2-3: Isi berita utama. Jika ada istilah teknis, WAJIB jelaskan dengan analogi sehari-hari (seperti contoh di atas).
-       - Paragraf 4: Opini tajam, skeptis, atau lemparan ke netizen. 
-    5. Kata Kunci Visual (visual_keywords): 3 kata kunci BAHASA INGGRIS. Jangan hanya menyebut nama perusahaan. Pikirkan VISUAL FISIK yang merepresentasikan berita tersebut secara akurat. Jika berita tentang Amazon AWS, gunakan "server room" atau "data center". Jika tentang baterai mobil listrik, gunakan "electric car battery". Jika tentang AI, gunakan "robotics" atau "futuristic technology". Ini bertujuan agar mesin pencari gambar dapat menemukan foto fisik yang sangat relevan.
+    4. Caption (caption): Naskah berita bergaya piramida terbalik (fakta paling penting di paragraf 1). Panjang 3-4 paragraf. Bahasa Indonesia baku namun mengalir (seperti gaya tulisan kumparan/Narasi). Jangan gunakan kata-kata AI generatif (seperti "Menariknya", "Kesimpulannya", "Mari kita").
+    5. Kueri Gambar (image_search_query): 1 kalimat singkat dan spesifik (maksimal 5 kata) berisi NAMA ASLI TOKOH atau PERISTIWA untuk mencari foto aslinya di Google Images (misal: "Jokowi pidato", "Fajar Fikri Japan Open", "Kecelakaan tol"). JANGAN gunakan kata kunci bahasa Inggris generik!
 
     ATURAN ANTI-AI SANGAT KETAT (CRITICAL): 
     - DILARANG KERAS menggunakan kata-kata basi khas AI berikut: "Di era digital saat ini", "Penting untuk diingat", "Mari kita bahas", "Kesimpulannya", "Tidak bisa dipungkiri", "Revolusi digital", "Mengubah lanskap".
     - DILARANG memaksakan kata "Gini loh" atau "Kebayang nggak" jika konteksnya tidak pas. Jadilah organik.
-    - SELURUH OUTPUT (kecuali visual_keywords) WAJIB 100% BAHASA INDONESIA murni tanpa campuran bahasa Inggris (kecuali nama merek/istilah IT).
+    - SELURUH OUTPUT (kecuali image_search_query) WAJIB 100% BAHASA INDONESIA murni tanpa campuran bahasa Inggris (kecuali nama merek/istilah IT).
     - DILARANG KERAS BERHALUSINASI! Anda HANYA boleh menuliskan fakta yang secara eksplisit ada di dalam teks riset mentah.
     - DILARANG menambahkan kutipan palsu, angka, statistik, atau nama entitas yang tidak disebutkan di dalam riset.
     - Jika teks riset ambigu, gunakan bahasa netral tanpa menebak-nebak detailnya. Pelanggaran terhadap aturan ini akan membuat sistem QA GAGAL!
@@ -39,9 +34,8 @@ export async function execute(draftContext = {}) {
     {
       "title": "...",
       "subtitle": "...",
-      "image_text": "...",
       "caption": "...",
-      "visual_keywords": ["keyword1", "keyword2", "keyword3"]
+      "image_search_query": "..."
     }
   `;
 

@@ -5,12 +5,14 @@ export async function execute(draftContext = {}) {
   
   const { drafts } = draftContext;
   
-  if (!drafts || !drafts.visual_keywords) {
-    throw new Error('Tidak ada kata kunci visual dari Copywriter');
+  const query = drafts.image_search_query || (drafts.visual_keywords ? drafts.visual_keywords.join(' ') : null);
+  
+  if (!query) {
+    throw new Error('Tidak ada kueri pencarian gambar dari Copywriter');
   }
 
   try {
-    const imageUrl = await fetchStockImage(drafts.visual_keywords);
+    const imageUrl = await fetchStockImage(query);
     console.log(`ImageStockRouter menemukan gambar: ${imageUrl}`);
     return imageUrl;
   } catch (e) {

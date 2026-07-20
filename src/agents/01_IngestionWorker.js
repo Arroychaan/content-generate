@@ -12,12 +12,15 @@ export async function execute(context = {}) {
   });
 
   const feeds = [
+    // === INTERNASIONAL (Terverifikasi 200 OK) ===
     'https://techcrunch.com/feed/',
     'https://www.theverge.com/rss/index.xml',
-    'https://www.wired.com/feed/rss',
     'https://feeds.bbci.co.uk/news/technology/rss.xml',
-    'https://www.liputan6.com/feed/tekno',
-    'https://www.antaranews.com/rss/tekno.xml'
+    // === INDONESIA (Terverifikasi 200 OK pada 2026-07-20) ===
+    'https://www.suara.com/rss/tekno',
+    'https://www.republika.co.id/rss',
+    'https://www.cnbcindonesia.com/tech/rss',
+    'https://sindikasi.okezone.com/index.php/rss/0/RSS2.0/1/0/tekno',
   ];
 
   let rawArticles = [];

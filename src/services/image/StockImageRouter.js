@@ -1,31 +1,31 @@
 export async function fetchStockImage(queryText = '') {
-  const apiKey = process.env.GOOGLE_API_KEY;
-  const cx = process.env.GOOGLE_CX;
-  
-  if (!apiKey || !cx) {
-    console.warn("GOOGLE_API_KEY atau GOOGLE_CX belum diset! Menggunakan gambar fallback.");
-    return 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=1080&auto=format&fit=crop';
-  }
-
-  const query = encodeURIComponent(queryText || 'breaking news');
+  const query = encodeURIComponent(queryText || 'breaking news Indonesia');
 
   try {
-    const url = `https://customsearch.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${query}&searchType=image&num=1&safe=active`;
-    const res = await fetch(url);
-    
+    const url = `https://www.bing.com/images/search?q=${query}&form=HDRSC2&first=1`;
+    const res = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+      }
+    });
+
     if (!res.ok) {
-      const errorText = await res.text();
-      throw new Error(`Google Search API error: ${res.status} - ${errorText}`);
+      throw new Error(`Bing Images error: ${res.status}`);
     }
 
-    const data = await res.json();
+    const html = await res.text();
+
+    // Ekstrak URL gambar asli dari atribut murl (media URL) Bing
+    const murlMatches = html.match(/murl&quot;:&quot;(https?:\/\/[^&]+)/g);
     
-    if (data.items && data.items.length > 0) {
-      // Ambil link gambar pertama
-      return data.items[0].link;
+    if (murlMatches && murlMatches.length > 0) {
+      // Ambil gambar pertama (paling relevan)
+      const imageUrl = murlMatches[0].replace('murl&quot;:&quot;', '');
+      console.log(`Bing Images menemukan gambar untuk "${queryText}": ${imageUrl}`);
+      return imageUrl;
     }
 
-    console.warn("Google Images tidak menemukan hasil untuk query:", queryText);
+    console.warn('Bing Images tidak menemukan hasil untuk query:', queryText);
     return 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=1080&auto=format&fit=crop';
   } catch (err) {
     console.error('StockImageRouter Error:', err.message);

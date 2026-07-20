@@ -1,31 +1,36 @@
 export async function fetchStockImage(queryText = '') {
-  const apiKey = process.env.GOOGLE_API_KEY;
-  const cx = process.env.GOOGLE_CX;
+  const serperKey = process.env.SERPER_API_KEY;
   
-  if (!apiKey || !cx) {
-    console.warn("GOOGLE_API_KEY atau GOOGLE_CX belum diset! Menggunakan gambar fallback.");
+  if (!serperKey) {
+    console.warn("SERPER_API_KEY belum diset! Menggunakan gambar fallback.");
     return 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=1080&auto=format&fit=crop';
   }
 
-  const query = encodeURIComponent(queryText || 'breaking news');
+  const query = queryText || 'breaking news';
 
   try {
-    const url = `https://customsearch.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${query}&searchType=image&num=1&safe=active`;
-    const res = await fetch(url);
+    const res = await fetch('https://google.serper.dev/images', {
+      method: 'POST',
+      headers: {
+        'X-API-KEY': serperKey,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ q: query })
+    });
     
     if (!res.ok) {
       const errorText = await res.text();
-      throw new Error(`Google Search API error: ${res.status} - ${errorText}`);
+      throw new Error(`Serper API error: ${res.status} - ${errorText}`);
     }
 
     const data = await res.json();
     
-    if (data.items && data.items.length > 0) {
+    if (data.images && data.images.length > 0) {
       // Ambil link gambar pertama
-      return data.items[0].link;
+      return data.images[0].imageUrl;
     }
 
-    console.warn("Google Images tidak menemukan hasil untuk query:", queryText);
+    console.warn("Serper tidak menemukan hasil untuk query:", queryText);
     return 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=1080&auto=format&fit=crop';
   } catch (err) {
     console.error('StockImageRouter Error:', err.message);

@@ -6,14 +6,20 @@ export async function execute(draftContext = {}) {
   
   const { topic, researchData, angle, qaFeedback } = draftContext;
 
+  // Bangun daftar fakta eksplisit dari sumber agar LLM tidak bisa mengarang
+  const sourceText = researchData || topic.combined_description || '';
+
   const prompt = `
     Anda adalah Admin Sosmed Tech yang To-The-Point, Sedikit Sinis/Skeptis, dan Organik. Anda menulis untuk audiens anak muda (Gen Z / Milenial).
     Tugas: Tulis naskah berita singkat berdasarkan data berikut.
     
     Data Topik: ${topic.title}
-    Riset: ${researchData}
     Angle Berita: ${angle}
-    ${qaFeedback ? `PERHATIAN (Revisi dari QA): ${qaFeedback}` : ''}
+    ${qaFeedback ? `REVISI WAJIB DARI EDITOR (QA): ${qaFeedback}. ANDA WAJIB MEMPERBAIKI KESALAHAN INI. JANGAN ULANGI KESALAHAN YANG SAMA.` : ''}
+    
+    === SUMBER FAKTA RESMI (HANYA GUNAKAN INFORMASI DARI BLOK INI) ===
+    ${sourceText}
+    === AKHIR SUMBER FAKTA ===
     
     Instruksi:
     1. Judul Utama (title): Maks 60 karakter, punchy, memancing perhatian. WAJIB BAHASA INDONESIA.
@@ -22,18 +28,25 @@ export async function execute(draftContext = {}) {
     4. Caption (caption): Naskah berita bergaya piramida terbalik (fakta paling penting di paragraf 1). Panjang 3-4 paragraf. Bahasa Indonesia baku namun mengalir (seperti gaya tulisan kumparan/Narasi). Jangan gunakan kata-kata AI generatif (seperti "Menariknya", "Kesimpulannya", "Mari kita").
     5. Kueri Gambar (image_search_query): 1 kalimat singkat dan spesifik (maksimal 5 kata) berisi NAMA ASLI TOKOH atau PERISTIWA untuk mencari foto aslinya di Google Images (misal: "Jokowi pidato", "Fajar Fikri Japan Open", "Kecelakaan tol"). JANGAN gunakan kata kunci bahasa Inggris generik!
 
-    ATURAN ANTI-AI SANGAT KETAT (CRITICAL): 
-    - DILARANG KERAS menggunakan kata-kata basi khas AI berikut: "Di era digital saat ini", "Penting untuk diingat", "Mari kita bahas", "Kesimpulannya", "Tidak bisa dipungkiri", "Revolusi digital", "Mengubah lanskap".
-    - DILARANG memaksakan kata "Gini loh" atau "Kebayang nggak" jika konteksnya tidak pas. Jadilah organik.
+    ██████████████████████████████████████████████████
+    █  ATURAN ANTI-HALUSINASI — PELANGGARAN = GAGAL  █
+    ██████████████████████████████████████████████████
+    
+    1. Anda HANYA BOLEH menyebutkan nama orang, nama produk, nama perusahaan, angka, skor, dan kutipan yang TERTULIS EKSPLISIT di dalam blok "SUMBER FAKTA RESMI" di atas.
+    2. Jika sumber menyebut "model AI baru" tanpa nama spesifik, tulis saja "model AI baru". JANGAN PERNAH mengarang nama model seperti "GPT-5.6 Sol" atau "Qwen3.8" atau nama apapun yang tidak ada di sumber.
+    3. Jika sumber menyebut "mengalahkan kompetitor" tanpa menyebut skor, tulis saja "mengalahkan kompetitor". JANGAN mengarang skor atau angka benchmark.
+    4. Jika sumber ambigu atau tidak lengkap, GUNAKAN BAHASA UMUM. Contoh: "sejumlah perusahaan teknologi" bukan mengarang nama perusahaan.
+    5. DILARANG menambahkan kutipan langsung (tanda kutip "...") kecuali kutipan tersebut ada persis di sumber.
+    
+    ATURAN BAHASA:
+    - DILARANG KERAS menggunakan kata-kata basi khas AI: "Di era digital saat ini", "Penting untuk diingat", "Mari kita bahas", "Kesimpulannya", "Tidak bisa dipungkiri", "Revolusi digital", "Mengubah lanskap".
     - SELURUH OUTPUT (kecuali image_search_query) WAJIB 100% BAHASA INDONESIA murni tanpa campuran bahasa Inggris (kecuali nama merek/istilah IT).
-    - DILARANG KERAS BERHALUSINASI! Anda HANYA boleh menuliskan fakta yang secara eksplisit ada di dalam teks riset mentah.
-    - DILARANG menambahkan kutipan palsu, angka, statistik, atau nama entitas yang tidak disebutkan di dalam riset.
-    - Jika teks riset ambigu, gunakan bahasa netral tanpa menebak-nebak detailnya. Pelanggaran terhadap aturan ini akan membuat sistem QA GAGAL!
 
     Format balasan WAJIB dalam bentuk JSON murni seperti ini (tanpa backticks markdown):
     {
       "title": "...",
       "subtitle": "...",
+      "image_text": "...",
       "caption": "...",
       "image_search_query": "..."
     }
@@ -55,9 +68,9 @@ export async function execute(draftContext = {}) {
     return {
       title: topic.title,
       subtitle: "Berita Terkini",
-      image_text: topic.title.substring(0, 70),
-      caption: researchData || topic.combined_description || "Informasi lebih lanjut belum tersedia saat ini.",
-      visual_keywords: ["news", "breaking", "update"]
+      image_text: topic.title.substring(0, 110),
+      caption: sourceText || "Informasi lebih lanjut belum tersedia saat ini.",
+      image_search_query: topic.title.split(' ').slice(0, 4).join(' ')
     };
   }
 }

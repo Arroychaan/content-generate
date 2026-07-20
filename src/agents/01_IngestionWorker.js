@@ -16,7 +16,7 @@ export async function execute(context = {}) {
     'https://www.theverge.com/rss/index.xml',
     'https://www.wired.com/feed/rss',
     'https://feeds.bbci.co.uk/news/technology/rss.xml',
-    'https://www.cnnindonesia.com/teknologi/rss',
+    'https://www.liputan6.com/feed/tekno',
     'https://www.antaranews.com/rss/tekno.xml'
   ];
 

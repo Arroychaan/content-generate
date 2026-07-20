@@ -18,7 +18,7 @@ export async function execute(draftContext = {}) {
     Instruksi:
     1. Judul Utama (title): Maks 60 karakter, punchy, memancing perhatian. WAJIB BAHASA INDONESIA.
     2. Subjudul (subtitle): Maks 90 karakter, pelengkap judul, memberikan konteks. WAJIB BAHASA INDONESIA.
-    3. Teks Gambar (image_text): MINIMAL 60 KARAKTER dan MAKSIMAL 100 KARAKTER. WAJIB BAHASA INDONESIA. Ini akan dicetak melayang di atas gambar. Rangkum inti berita dengan gaya bahasa kasual.
+    3. Teks Gambar (image_text): MINIMAL 80 KARAKTER dan MAKSIMAL 110 KARAKTER. WAJIB BAHASA INDONESIA. Ini akan dicetak melayang di atas gambar. Rangkum inti berita dengan gaya bahasa kasual.
     4. Caption (caption): Naskah berita. WAJIB BAHASA INDONESIA. 
        - CONTOH GAYA PENULISAN YANG BENAR (WAJIB DITIRU IRAMANYA):
          "Baterai bocor udah jadi ketakutan terbesar buat yang mau beli mobil listrik. Tapi startup ini baru aja ngenalin baterai solid-state yang diklaim gak bakal meledak walau ditusuk paku. Bedanya apa sama baterai biasa? Singkatnya, kalau baterai HP lo itu cairan, yang ini bentuknya padat. Lebih aman, lebih tahan lama."

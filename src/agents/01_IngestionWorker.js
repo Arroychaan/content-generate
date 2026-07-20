@@ -17,7 +17,7 @@ export async function execute(context = {}) {
     'https://www.theverge.com/rss/index.xml',
     'https://feeds.bbci.co.uk/news/technology/rss.xml',
     // === INDONESIA (Terverifikasi 200 OK pada 2026-07-20) ===
-    'https://www.suara.com/rss/tekno',
+    'https://www.jpnn.com/index.php?mib=rss',
     'https://www.republika.co.id/rss',
     'https://www.cnbcindonesia.com/tech/rss',
     'https://sindikasi.okezone.com/index.php/rss/0/RSS2.0/1/0/tekno',

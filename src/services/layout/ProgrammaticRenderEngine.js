@@ -77,11 +77,12 @@ export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
               style: {
                 display: 'flex',
                 flexDirection: 'column',
-                backgroundColor: 'rgba(255, 255, 255, 0.98)', // Premium frosted white
+                backgroundColor: 'rgba(15, 23, 42, 0.95)', // Biru Dongker (Navy Blue)
                 padding: '64px',
                 borderRadius: '36px',
+                border: '2px solid rgba(255, 255, 255, 0.15)', // Minimalist clean border
                 width: '920px',
-                boxShadow: '0 30px 80px rgba(0, 0, 0, 0.25)', // Rich deep shadow
+                boxShadow: '0 30px 80px rgba(0, 0, 0, 0.4)', // Rich deep shadow
               },
               children: [
                 // Editorial Badge
@@ -100,7 +101,7 @@ export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
                           style: {
                             width: '4px',
                             height: '20px',
-                            backgroundColor: '#000000',
+                            backgroundColor: '#38BDF8', // Light blue accent (kontras)
                             marginRight: '12px',
                             borderRadius: '2px',
                           }
@@ -112,7 +113,7 @@ export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
                           style: {
                             fontSize: '20px',
                             fontWeight: 'bold',
-                            color: '#555555',
+                            color: '#94A3B8', // Light slate gray untuk sub-teks
                             letterSpacing: '3px',
                             textTransform: 'uppercase',
                           },
@@ -129,7 +130,7 @@ export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
                     style: {
                       fontSize: '64px',
                       fontWeight: 600,
-                      color: '#111111', // Jet black for contrast
+                      color: '#F8FAFC', // Putih terang untuk kontras maksimal
                       lineHeight: 1.35,
                       letterSpacing: '-0.5px',
                     },

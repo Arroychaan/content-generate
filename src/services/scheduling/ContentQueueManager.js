@@ -8,20 +8,21 @@ export async function checkNextContentType() {
     .order('created_at', { ascending: false })
     .limit(2);
 
+  // Jika data kurang dari 2, mulai dengan IMAGE
   if (error || !data || data.length === 0) {
     return 'IMAGE'; // Default start
   }
 
-  // If the last one was IMAGE, next 2 must be TEXT_ONLY
-  if (data[0].content_type === 'IMAGE') {
-    return 'TEXT_ONLY';
+  // Jika konten terakhir adalah TEXT_ONLY, 2 konten berikutnya wajib IMAGE
+  if (data[0].content_type === 'TEXT_ONLY') {
+    return 'IMAGE';
   }
   
-  // If last one was TEXT, check the one before
-  if (data[0].content_type === 'TEXT_ONLY' && data.length > 1 && data[1].content_type === 'IMAGE') {
-    return 'TEXT_ONLY';
+  // Jika konten terakhir IMAGE, cek konten sebelumnya
+  if (data[0].content_type === 'IMAGE' && data.length > 1 && data[1].content_type === 'TEXT_ONLY') {
+    return 'IMAGE';
   }
 
-  // If last two were TEXT_ONLY, next one is IMAGE
-  return 'IMAGE';
+  // Jika dua konten terakhir sudah IMAGE, maka giliran TEXT_ONLY (X/Threads)
+  return 'TEXT_ONLY';
 }

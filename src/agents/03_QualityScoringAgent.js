@@ -10,14 +10,16 @@ export async function execute(uniqueTopics = []) {
 
   for (const topic of uniqueTopics) {
     const prompt = `
-      Anda adalah seorang Pimpinan Redaksi Berita Nasional.
-      Tugas: Evaluasi kelayakan berita berikut untuk dipublikasikan di media sosial, 
-      berdasarkan: Aktualitas, Urgensi, Dampak Sosial, dan Potensi Engagement.
+      Anda adalah seorang Pimpinan Redaksi Berita Teknologi.
+      Tugas utama Anda: EVALUASI KETAT apakah berita ini MURNI tentang topik "AI, Startup, Gadget, atau Teknologi". 
+      Jika berita membahas politik murni, gosip, kriminal, hiburan umum, atau topik di luar teknologi/startup, BERIKAN SKOR 0.
+      
+      Jika berita memang tentang Teknologi/AI/Startup/Gadget, evaluasi kelayakannya berdasarkan: Aktualitas, Urgensi, Dampak Sosial, dan Potensi Engagement untuk audiens anak muda.
       
       Judul: ${topic.title}
       Deskripsi: ${topic.combined_description.substring(0, 500)}...
       
-      Berikan skor absolut berupa angka desimal dari 1.0 hingga 10.0 (misalnya: 7.5).
+      Berikan skor absolut berupa angka desimal dari 1.0 hingga 10.0 (misalnya: 7.5). Jika bukan berita teknologi/startup, WAJIB skor 0.
       HANYA BALAS DENGAN ANGKA SKOR. TIDAK ADA TEKS LAIN.
     `;
 

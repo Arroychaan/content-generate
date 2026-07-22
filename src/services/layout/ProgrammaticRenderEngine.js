@@ -18,21 +18,50 @@ async function getInterFont() {
   }
 }
 
-export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
-  let finalBgImage = backgroundImageUrl;
-  if (backgroundImageUrl && backgroundImageUrl.startsWith('http')) {
+async function getBgImageBase64(primaryUrl) {
+  const fallbackUrl = 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=1080&auto=format&fit=crop';
+  
+  const tryFetchBase64 = async (url) => {
+    if (!url || !url.startsWith('http')) return null;
     try {
-      const res = await fetch(backgroundImageUrl);
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 6000);
+      const res = await fetch(url, {
+        signal: controller.signal,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        }
+      });
+      clearTimeout(timeout);
       if (res.ok) {
         const arrayBuffer = await res.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
         const contentType = res.headers.get('content-type') || 'image/jpeg';
-        finalBgImage = `data:${contentType};base64,${buffer.toString('base64')}`;
+        return `data:${contentType};base64,${buffer.toString('base64')}`;
       }
     } catch (e) {
-      console.warn('Failed to pre-fetch background image:', e.message);
+      console.warn(`Failed to fetch image as base64 from ${url}:`, e.message);
     }
+    return null;
+  };
+
+  if (primaryUrl && primaryUrl.startsWith('data:image/')) {
+    return primaryUrl;
   }
+
+  let base64 = await tryFetchBase64(primaryUrl);
+  if (base64) return base64;
+
+  console.warn('Primary background image failed, falling back to guaranteed Unsplash news photo.');
+  base64 = await tryFetchBase64(fallbackUrl);
+  if (base64) return base64;
+
+  // Ultimate fallback neutral dark background (NEVER pure white)
+  return 'data:image/svg+xml;base64,' + Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080"><rect width="1080" height="1080" fill="#0f172a"/></svg>').toString('base64');
+}
+
+export async function renderProgrammaticImage(imageText, backgroundImageUrl) {
+  const finalBgImage = await getBgImageBase64(backgroundImageUrl);
 
   const fontData = await getInterFont();
 

@@ -26,7 +26,10 @@ export async function execute(draftContext = {}) {
     2. Subjudul (subtitle): Maks 90 karakter, pelengkap judul, memberikan konteks. WAJIB BAHASA INDONESIA.
     3. Teks Gambar (image_text): MINIMAL 80 KARAKTER dan MAKSIMAL 110 KARAKTER. WAJIB BAHASA INDONESIA. Ini akan dicetak melayang di atas gambar. Rangkum inti berita dengan gaya bahasa kasual.
     4. Caption (caption): Naskah berita bergaya piramida terbalik (fakta paling penting di paragraf 1). Panjang 3-4 paragraf. Bahasa Indonesia baku namun mengalir (seperti gaya tulisan kumparan/Narasi). Jangan gunakan kata-kata AI generatif (seperti "Menariknya", "Kesimpulannya", "Mari kita").
-    5. Kueri Gambar (image_search_query): 1 kalimat singkat dan spesifik (maksimal 5 kata) berisi NAMA ASLI TOKOH atau PERISTIWA untuk mencari foto aslinya di Google Images (misal: "Jokowi pidato", "Fajar Fikri Japan Open", "Kecelakaan tol"). JANGAN gunakan kata kunci bahasa Inggris generik!
+    5. Kueri Pencarian Foto (image_search_query): 1 kalimat spesifik (maksimal 5 kata) untuk mencari FOTO JURNALISTIK DOKUMENTER NYATA di mesin pencari gambar (misal: "Sam Altman OpenAI press conference", "Gedung OpenAI San Francisco", "Presiden Jokowi pidato", "Fajar Fikri pertandingan Japan Open").
+       - DILARANG KERAS hanya menuliskan nama merek/logo saja (misal "OpenAI" atau "Apple" atau "Google").
+       - WAJIB menambahkan kata kontekstual foto fisik seperti "headquarters", "building", "office", "press conference", "portrait", "stadium", "event", atau nama tokoh spesifik terkait berita.
+       - Ini bertujuan agar mesin mengambil FOTO DOKUMENTER FISIK BERESOLUSI TINGGI, BUKAN LOGO ATAU IKON YANG DI-ZOOM!
 
     ██████████████████████████████████████████████████
     █  ATURAN ANTI-HALUSINASI — PELANGGARAN = GAGAL  █

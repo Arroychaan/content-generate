@@ -3,6 +3,7 @@ import { generateTextWithRotation } from '../services/llm/TokenRotator';
 import { supabaseAdmin } from '../lib/supabase';
 import { sendTelegramNotification } from '../services/notification/TelegramNotifier';
 import { checkNextContentType } from '../services/scheduling/ContentQueueManager';
+import { isSystemRunning } from '../services/system/SystemControlManager';
 
 // Import all 13 agents (mock implementation structure for now)
 import * as IngestionWorker from '../agents/01_IngestionWorker';
@@ -21,6 +22,17 @@ import * as StorageIngestionSync from '../agents/13_StorageIngestionSync';
 
 export async function runPipelineCycle(batchSize = parseInt(process.env.BATCH_SIZE_PER_CYCLE || '3')) {
   try {
+    // 🛑 Emergency Switch Check
+    if (!(await isSystemRunning())) {
+      console.log('🛑 System Status is STOPPED. No agents allowed to run!');
+      await supabaseAdmin.from('system_activity_logs').insert([{
+        event_type: 'PIPELINE_BLOCKED',
+        message: '🛑 Execution blocked! System status is STOPPED (BERHENTI). No agents allowed to run.',
+        agent_stage: 0
+      }]);
+      return;
+    }
+
     console.log(`Starting pipeline cycle with batch size ${batchSize}...`);
     await supabaseAdmin.from('system_activity_logs').insert([{
       event_type: 'PIPELINE_START',
@@ -29,19 +41,24 @@ export async function runPipelineCycle(batchSize = parseInt(process.env.BATCH_SI
     }]);
     
     // Stage 1: Ingestion
+    if (!(await isSystemRunning())) return;
     const rawFeeds = await IngestionWorker.execute();
     
     // Stage 2: Deduplication
+    if (!(await isSystemRunning())) return;
     const uniqueTopics = await DeduplicationAgent.execute(rawFeeds);
     
     // Stage 3: Quality Scoring
+    if (!(await isSystemRunning())) return;
     const scoredTopics = await QualityScoringAgent.execute(uniqueTopics);
     
     // Stage 4: Topic Selection (filter out top N based on batchSize)
+    if (!(await isSystemRunning())) return;
     const selectedTopics = await TopicSelector.execute(scoredTopics, batchSize);
 
     // Process each topic individually (Micro-batching)
     for (const topic of selectedTopics) {
+      if (!(await isSystemRunning())) break;
       await processSingleTopic(topic);
     }
 
@@ -58,6 +75,10 @@ export async function runPipelineCycle(batchSize = parseInt(process.env.BATCH_SI
 }
 
 async function processSingleTopic(topic) {
+  if (!(await isSystemRunning())) {
+    console.log(`🛑 System STOPPED. Skipping processSingleTopic for "${topic?.title}"`);
+    return;
+  }
   let currentStage = 5;
   try {
     const contentType = await checkNextContentType();

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { runPipelineCycle } from '../../../../pipeline/PipelineCoordinator';
+import { isSystemRunning } from '../../../../services/system/SystemControlManager';
 
 export async function POST(request) {
   try {
@@ -8,16 +9,15 @@ export async function POST(request) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
-    // Trigger pipeline asynchronously (don't block the request)
-    // Next.js might kill background tasks in Serverless environment if not careful,
-    // For Vercel, if this exceeds the max duration, the function terminates.
-    // Ensure timeout is configured in next.config.mjs or Vercel settings.
-    
-    // We await it here so Vercel doesn't kill the process immediately,
-    // but the max duration should be high enough (e.g. 5 mins for pro).
-    // In free tier, it's 10-15s, which might be an issue. If so, a more 
-    // robust queueing system or running on Edge is needed.
-    
+    const running = await isSystemRunning();
+    if (!running) {
+      console.log('🛑 Cron trigger ignored: System is STOPPED.');
+      return NextResponse.json({ 
+        success: false, 
+        message: 'Pipeline blocked. System status is STOPPED by admin command.' 
+      });
+    }
+
     console.log('Triggering pipeline cycle from cron...');
     runPipelineCycle().catch(console.error);
 
